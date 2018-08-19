@@ -62,4 +62,7 @@
       <Filter>source</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\readme.md" />
+  </ItemGroup>
 </Project>
