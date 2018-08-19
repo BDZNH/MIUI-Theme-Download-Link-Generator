@@ -1,5 +1,8 @@
 #define _CRT_NONSTDC_NO_WARNINGS
 
+#ifndef __GENERATE_H
+#define __GENERATE_H
+
 #include <cstdint>
 #include <iostream>
 #include <memory>
@@ -7,6 +10,7 @@
 #include <regex>
 #include <fstream>
 #include <cstdlib>
+#include <cstring>
 
 #include <curl/curl.h>
 #include <json/json.h>
@@ -29,19 +33,20 @@ namespace
 	}
 }
 
-int main()
+inline bool Genarate(std::string Geturl, char * tureUrl)
 {
 	//const std::string url("http://thm.market.xiaomi.com/thm/download/v2/b3e91bfb-e4a1-4695-a24f-24fddb3a595c/");
-	std::string Geturl;
-	std::cout << "粘贴或者输入主题链接(如 http://zhuti.xiaomi.com/detail/b3e91bfb-e4a1-4695-a24f-24fddb3a595c), 然后按下Enter:\n";
+	//std::string Geturl;
+	//std::cout << "粘贴或者输入主题链接(如 http://zhuti.xiaomi.com/detail/b3e91bfb-e4a1-4695-a24f-24fddb3a595c), 然后按下Enter:\n";
 	std::cin >> Geturl;
 	std::string url("http://thm.market.xiaomi.com/thm/download/v2/");
 	const std::string headOfUrl2("http://zhuti.xiaomi.com/detail/");
 
 	if (Geturl.size() <= url.size())
 	{
-		std::cout << "错误的链接" << std::endl;
-		system("pause");
+		//std::cout << "错误的链接" << std::endl;
+		//system("pause");
+		strcpy(tureUrl, u8"错误的链接");
 		return 0;
 	}
 
@@ -116,15 +121,17 @@ int main()
 			std::sregex_iterator it(Json.begin(), Json.end(), r);
 			//std::cout << "URL: " << it->str() << std::endl;
 
+			std::string temp(it->str());
+			strcpy(tureUrl, temp.c_str());
 
-			std::ofstream DownloadLink("./Link.txt");
+			/*std::ofstream DownloadLink("./Link.txt");
 
 			if (!DownloadLink.is_open())
 			{
 				std::cout << "文件\"Link.txt\"不存在,检查权限." << std::endl;
-			}
+			}*/
 
-			DownloadLink << "复制以下链接到浏览器地址栏进行下载\n\n" << it->str() << std::endl;
+			//DownloadLink << "复制以下链接到浏览器地址栏进行下载\n\n" << it->str() << std::endl;
 
 
 			const std::string dateString(jsonData["date"].asString());
@@ -140,8 +147,8 @@ int main()
 		}
 		else
 		{
-			std::cout << "Could not parse HTTP data as JSON" << std::endl;
-			std::cout << "HTTP data was:\n" << *httpData.get() << std::endl;
+			//std::cout << "Could not parse HTTP data as JSON" << std::endl;
+			//std::cout << "HTTP data was:\n" << *httpData.get() << std::endl;
 			return 1;
 		}
 	}
@@ -151,7 +158,9 @@ int main()
 		return 1;
 	}
 
-	system("notepad.exe Link.txt");
+	//system("notepad.exe Link.txt");
 
 	return 0;
 }
+
+#endif
