@@ -109,7 +109,8 @@ int main()
 
 
 			//用正则匹配链接
-			std::string pattern("http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?");
+			/*std::string pattern("http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?");*/
+			std::string pattern("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]");
 			pattern = "[[:alpha:]]*" + pattern + "[[:alpha:]]*";
 			std::regex r(pattern);
 			std::sregex_iterator it(Json.begin(), Json.end(), r);
