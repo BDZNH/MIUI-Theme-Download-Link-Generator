@@ -154,7 +154,7 @@
     <ClCompile Include="generate.h" />
     <ClCompile Include="imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui_impl_opengl2.cpp" />
-    <ClCompile Include="mainwindow.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\imgui\imconfig.h" />

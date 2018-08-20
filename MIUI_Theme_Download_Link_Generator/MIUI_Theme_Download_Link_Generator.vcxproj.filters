@@ -41,9 +41,6 @@
     <ClCompile Include="imgui_impl_opengl2.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="mainwindow.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="..\include\imgui\imgui.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -54,6 +51,9 @@
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="generate.h">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
