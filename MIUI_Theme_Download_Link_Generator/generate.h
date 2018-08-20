@@ -35,32 +35,17 @@ namespace
 
 inline bool Genarate(std::string Geturl, char * tureUrl)
 {
-	//const std::string url("http://thm.market.xiaomi.com/thm/download/v2/b3e91bfb-e4a1-4695-a24f-24fddb3a595c/");
-	//std::string Geturl;
-	//std::cout << "粘贴或者输入主题链接(如 http://zhuti.xiaomi.com/detail/b3e91bfb-e4a1-4695-a24f-24fddb3a595c), 然后按下Enter:\n";
-	std::cin >> Geturl;
+	
 	std::string url("http://thm.market.xiaomi.com/thm/download/v2/");
 	const std::string headOfUrl2("http://zhuti.xiaomi.com/detail/");
 
 	if (Geturl.size() <= url.size())
 	{
-		//std::cout << "错误的链接" << std::endl;
-		//system("pause");
 		strcpy(tureUrl, u8"错误的链接");
-		return 0;
+		return false;
 	}
 
 	url += Geturl.substr(headOfUrl2.size(), Geturl.size() - headOfUrl2.size());
-
-	//std::cout << url << std::endl;
-	/*std::string::iterator it = url.begin();
-	for (int i = 0; i <= headOfUrl2.size(); i++)
-		it++;
-	while (it!=url.end())
-	{
-		headOfUrl1 += (std::string)(*it);
-	}*/
-
 
 
 	CURL* curl = curl_easy_init();
@@ -96,71 +81,40 @@ inline bool Genarate(std::string Geturl, char * tureUrl)
 
 	if (httpCode == 200)
 	{
-		//std::cout << "\nGot successful response from " << url << std::endl;
 
-		// Response looks good - done using Curl now.  Try to parse the results
-		// and print them out.
 		Json::Value jsonData;
 		Json::Reader jsonReader;
 
 		if (jsonReader.parse(*httpData, jsonData))
 		{
-			//std::cout << "Successfully parsed JSON data" << std::endl;
-			//std::cout << "\nJSON data received:" << std::endl;
-			//std::cout << jsonData.toStyledString() << std::endl;
 
 			std::string Json(jsonData.toStyledString());
-			//std::cout << Json << std::endl;
-
-
+	
 			//用正则匹配链接
 			/*std::string pattern("http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?");*/
 			std::string pattern("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]");
 			pattern = "[[:alpha:]]*" + pattern + "[[:alpha:]]*";
 			std::regex r(pattern);
 			std::sregex_iterator it(Json.begin(), Json.end(), r);
-			//std::cout << "URL: " << it->str() << std::endl;
 
 			std::string temp(it->str());
 			strcpy(tureUrl, temp.c_str());
 
-			/*std::ofstream DownloadLink("./Link.txt");
-
-			if (!DownloadLink.is_open())
-			{
-				std::cout << "文件\"Link.txt\"不存在,检查权限." << std::endl;
-			}*/
-
-			//DownloadLink << "复制以下链接到浏览器地址栏进行下载\n\n" << it->str() << std::endl;
-
-
-			const std::string dateString(jsonData["date"].asString());
-			const std::size_t unixTimeMs(
-				jsonData["milliseconds_since_epoch"].asUInt64());
-			const std::string timeString(jsonData["time"].asString());
-
-			//std::cout << "Natively parsed:" << std::endl;
-			//std::cout << "\tDate string: " << dateString << std::endl;
-			//std::cout << "\tUnix timeMs: " << unixTimeMs << std::endl;
-			//std::cout << "\tTime string: " << timeString << std::endl;
-			//std::cout << std::endl;
 		}
 		else
 		{
-			//std::cout << "Could not parse HTTP data as JSON" << std::endl;
-			//std::cout << "HTTP data was:\n" << *httpData.get() << std::endl;
-			return 1;
+			strcpy(tureUrl, u8"生成链接失败");
+			return false;
 		}
 	}
 	else
 	{
-		std::cout << "Couldn't GET from " << url << " - exiting" << std::endl;
-		return 1;
+		//std::cout << "Couldn't GET from " << url << " - exiting" << std::endl;
+		strcpy(tureUrl, u8"生成链接失败");
+		return false;
 	}
 
-	//system("notepad.exe Link.txt");
-
-	return 0;
+	return true;
 }
 
 #endif
