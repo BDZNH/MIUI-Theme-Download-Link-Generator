@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CURLTEST", "CURLTEST\CURLTEST.vcxproj", "{DFEE3217-D57F-4271-A89D-8DD2C066D52C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MIUI_Theme_Download_Link_Generator", "MIUI_Theme_Download_Link_Generator\MIUI_Theme_Download_Link_Generator.vcxproj", "{DFEE3217-D57F-4271-A89D-8DD2C066D52C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
