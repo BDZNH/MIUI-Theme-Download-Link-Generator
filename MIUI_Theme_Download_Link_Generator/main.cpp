@@ -66,7 +66,7 @@ int main()
 
 		//Set the property of the window.
 		ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_FirstUseEver);
-		ImGui::SetNextWindowSize(ImVec2(1000, 100), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSize(ImVec2(1000, 140), ImGuiCond_FirstUseEver);
 		ImGui::Begin("Main Window", &show_main_window, ImGuiWindowFlags_NoTitleBar \
 			| ImGuiWindowFlags_NoMove \
 			| ImGuiWindowFlags_NoResize \
