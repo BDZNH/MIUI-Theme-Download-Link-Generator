@@ -1,9 +1,7 @@
-#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")
+#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"") //remove cmd window.
 #define _CRT_SECURE_NO_WARNINGS
 
-
-//#include "toclipboard.h"
-#include "generate.h"
+#include "generate.h" //generate download link.
 #include <imgui/imgui.h>
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl2.h"
@@ -12,7 +10,6 @@
 #include <cstring>
 #include <Windows.h>
 
-int tocliboard();
 
 static void glfw_error_callback(int error, const char* description)
 {
