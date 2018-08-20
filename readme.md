@@ -1,4 +1,4 @@
-[中文](readme - zh.md)
+[中文](readme\ -\ zh.md)
 
 # Generate the download link of MIUI theme.
 ![无标题.jpg](https://i.loli.net/2018/08/19/5b7956e3412f1.jpg)
