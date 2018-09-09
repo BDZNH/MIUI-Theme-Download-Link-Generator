@@ -18,28 +18,37 @@
     <ClInclude Include="resource.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="imgui_impl_opengl2.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui_impl_glfw.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\imgui\imconfig.h">
-      <Filter>source</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\include\imgui\imgui.h">
-      <Filter>source</Filter>
+      <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\include\imgui\imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\imgui\imstb_rectpack.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\imgui\imstb_textedit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\imgui\imstb_truetype.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_dx11.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_win32.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="generate.h">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="imgui_impl_glfw.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui_impl_opengl2.cpp">
-      <Filter>imgui</Filter>
+    <ClCompile Include="main.cpp">
+      <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\include\imgui\imgui.cpp">
       <Filter>imgui</Filter>
@@ -50,10 +59,16 @@
     <ClCompile Include="..\include\imgui\imgui_draw.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="generate.h">
+    <ClCompile Include="..\include\imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_dx11.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="imgui_impl_win32.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="generate.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
