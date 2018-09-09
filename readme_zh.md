@@ -9,7 +9,7 @@
 
 -----
 # 依赖
- - [imgui](https://github.com/ocornut/imgui)(with glfw and opengl)
+ - [imgui](https://github.com/ocornut/imgui)
  - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
  - [libcurl](https://curl.haxx.se/download.html)
 
