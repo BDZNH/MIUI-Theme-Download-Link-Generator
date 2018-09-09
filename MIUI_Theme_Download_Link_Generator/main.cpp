@@ -184,7 +184,7 @@ int WINAPI WinMain(
 		// Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called "Debug".
 		{
 
-			ImGui::Text(u8"用法：粘贴小米主题的链接到第一个框，点击生成下载链接，然后点击复制或者下载。by BDZNH");
+			ImGui::Text(u8"用法：粘贴小米主题的链接到第一个框，点击生成下载链接或者按下Enter，然后点击复制或者下载。by BDZNH");
 			static char link[128] = u8"粘贴小米主题的链接";
 			static char direct_link[128] = u8"I'm here";
 			ImGui::PushItemWidth(ImGui::GetWindowWidth() - 120);
@@ -198,6 +198,16 @@ int WINAPI WinMain(
 			}
 			ImGui::SameLine();
 
+
+			//if the Enter key is pressed, generate downloadlink
+			for (int i = 0; i < IM_ARRAYSIZE(io.KeysDown); i++)
+			{
+				if (io.KeysDownDuration[i] >= 0.0f && 13 == i ) 
+				{
+					Genarate(link, direct_link);//the main function.
+				}
+			}
+				
 			//copy the direct download link to clipboard.
 			if (ImGui::Button(u8"复制"))
 			{
