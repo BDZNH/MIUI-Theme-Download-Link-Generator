@@ -1,7 +1,7 @@
 [中文](readme_zh.md)
 
 # Generate the download link of MIUI theme.
-![无标题.jpg](https://i.loli.net/2018/09/09/5b94e4dbedde9.jpg)
+![无标题.jpg](https://i.loli.net/2018/10/14/5bc2a84dd61cf.jpg)
 -----
 If you want to compile it by yourself. You need [libcurl](https://curl.haxx.se/download.html) and [jsoncpp](https://github.com/open-source-parsers/jsoncpp) installed.
 And you need to build curl and json with `/MDd` for Debug and `/MD` for Release.
