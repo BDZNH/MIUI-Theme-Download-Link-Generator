@@ -1,7 +1,7 @@
 [English](readme.md)
 
 # 生成小米主题下载链接
-![无标题.jpg](https://i.loli.net/2018/09/09/5b94e4dbedde9.jpg)
+![无标题.jpg](https://i.loli.net/2018/10/14/5bc2a84dd61cf.jpg)
 -----
 如果你想自己编译的话，你需要 [libcurl](https://curl.haxx.se/download.html) 和 [jsoncpp](https://github.com/open-source-parsers/jsoncpp) ,并且编译这两个库的时候相同的编译参数。
  - 对于Release版本，在运行库选项中你需要使用`多线程 DLL (/MD)`

@@ -79,5 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\readme.md" />
+    <None Include="..\readme_zh.md" />
   </ItemGroup>
 </Project>
