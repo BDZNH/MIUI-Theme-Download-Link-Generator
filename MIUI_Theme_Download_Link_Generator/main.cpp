@@ -115,7 +115,7 @@ int WINAPI WinMain(
 	RegisterClassEx(&wc);
 	HWND hwnd = CreateWindow(_T("ImGui Example"), _T("MIUI 主题下载链接生成"),
 		WS_SYSMENU | \
-		WS_MINIMIZEBOX, 100, 100, 1018, 165, NULL, NULL, wc.hInstance, NULL);
+		WS_MINIMIZEBOX, 100, 100, 1017, 165, NULL, NULL, wc.hInstance, NULL);
 
 	// Initialize Direct3D
 	if (CreateDeviceD3D(hwnd) < 0)
@@ -139,11 +139,11 @@ int WINAPI WinMain(
 	ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
 	// Setup style
-	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsClassic();
+	//ImGui::StyleColorsLight();
+	ImGui::StyleColorsClassic();
 
+	
 	// Load Fonts
-
 	ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\msyh.ttc", 18.0f, NULL, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
 	//IM_ASSERT(font != NULL);
 
@@ -192,6 +192,12 @@ int WINAPI WinMain(
 			ImGui::InputText(u8"生成的主题链接", direct_link, IM_ARRAYSIZE(direct_link));
 			ImGui::PopItemWidth();
 			ImGui::PushItemWidth(120);
+
+			if (ImGui::Button(u8"打开主题商店"))
+			{
+				ShellExecute(NULL, _T("open"), _T("explorer.exe"), _T("http://zhuti.xiaomi.com/"), NULL, SW_SHOW);
+			}
+			ImGui::SameLine();
 			if (ImGui::Button(u8"生成下载链接"))
 			{
 				Genarate(link, direct_link);
