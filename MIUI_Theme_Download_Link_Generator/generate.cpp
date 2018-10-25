@@ -58,7 +58,7 @@ bool Genarate(std::string Geturl, char * tureUrl)
 			std::string Json(jsonData.toStyledString());
 
 			//use regex to find the direct_download_link.
-			/*std::string pattern("http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?");*/
+			//std::string pattern("http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?");
 			std::string pattern("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]");
 			pattern = "[[:alpha:]]*" + pattern + "[[:alpha:]]*";
 			std::regex r(pattern);

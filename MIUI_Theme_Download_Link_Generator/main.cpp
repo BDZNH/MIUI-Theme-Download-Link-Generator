@@ -186,7 +186,7 @@ int WINAPI WinMain(
 
 			ImGui::Text(u8"用法：粘贴小米主题的链接到第一个框，点击生成下载链接或者按下Enter，然后点击复制或者下载。by BDZNH");
 			static char link[128] = u8"粘贴小米主题的链接";
-			static char direct_link[128] = u8"I'm here";
+			static char direct_link[1000] = u8"I'm here";
 			ImGui::PushItemWidth(ImGui::GetWindowWidth() - 120);
 			ImGui::InputText(u8"小米主题的链接", link, IM_ARRAYSIZE(link));
 			ImGui::InputText(u8"生成的主题链接", direct_link, IM_ARRAYSIZE(direct_link));
