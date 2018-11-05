@@ -76,8 +76,7 @@ bool Genarate(std::string Geturl, char * tureUrl)
 	}
 	else
 	{
-		//std::cout << "Couldn't GET from " << url << " - exiting" << std::endl;
-		strcpy(tureUrl, u8"生成链接失败");
+		strcpy(tureUrl, u8"啊哦 生成链接失败 看看是不是网络有问题或者链接错误");
 		return false;
 	}
 
