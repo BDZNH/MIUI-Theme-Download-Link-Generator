@@ -10,7 +10,7 @@
 -----
 # 依赖
  - [imgui](https://github.com/ocornut/imgui)
- - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
+ - [rapidjson](https://github.com/Tencent/rapidjson)
  - [libcurl](https://curl.haxx.se/download.html)
 
  -----

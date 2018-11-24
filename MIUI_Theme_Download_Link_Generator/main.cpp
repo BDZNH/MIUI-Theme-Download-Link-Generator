@@ -115,7 +115,7 @@ int WINAPI WinMain(
 	RegisterClassEx(&wc);
 	HWND hwnd = CreateWindow(_T("ImGui Example"), _T("MIUI 主题下载链接生成"),
 		WS_SYSMENU | \
-		WS_MINIMIZEBOX, 100, 100, 1017, 163, NULL, NULL, wc.hInstance, NULL);
+		WS_MINIMIZEBOX, 100, 100, 1017, 158, NULL, NULL, wc.hInstance, NULL);
 
 	// Initialize Direct3D
 	if (CreateDeviceD3D(hwnd) < 0)

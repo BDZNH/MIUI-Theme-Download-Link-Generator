@@ -31,7 +31,7 @@ bool Genarate(std::string Geturl, char * tureUrl)
 
 	// Response information.
 	int httpCode(0);
-	std::unique_ptr<std::string> httpData(new std::string());
+	std::string RequestData;
 
 	// Hook up data handling function.
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, callback);
@@ -39,7 +39,7 @@ bool Genarate(std::string Geturl, char * tureUrl)
 	// Hook up data container (will be passed as the last parameter to the
 	// callback handling function).  Can be any pointer type, since it will
 	// internally be passed as a void pointer.
-	curl_easy_setopt(curl, CURLOPT_WRITEDATA, httpData.get());
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &RequestData);
 
 	// Run our HTTP GET command, capture the HTTP response code, and clean up.
 	curl_easy_perform(curl);
@@ -48,31 +48,51 @@ bool Genarate(std::string Geturl, char * tureUrl)
 
 	if (httpCode == 200)
 	{
-
-		Json::Value jsonData;
-		Json::Reader jsonReader;
-
-		if (jsonReader.parse(*httpData, jsonData))
+		rapidjson::Document document;
+		document.Parse(RequestData.c_str());
+		//assert(document.HasMember("apiData"));
+		if (document.HasMember("apiData"))
 		{
-
-			std::string Json(jsonData.toStyledString());
-
-			//use regex to find the direct_download_link.
-			//std::string pattern("http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?");
-			std::string pattern("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]");
-			pattern = "[[:alpha:]]*" + pattern + "[[:alpha:]]*";
-			std::regex r(pattern);
-			std::sregex_iterator it(Json.begin(), Json.end(), r);
-
-			std::string temp(it->str());
-			strcpy(tureUrl, temp.c_str());
-
+			const rapidjson::Value& a = document["apiData"];
+			if (a.IsObject())
+			{
+				if (a.HasMember("downloadUrl"))
+				{
+					//std::cout << "\n\ndownloadUrl: " << a["downloadUrl"].GetString() << std::endl;
+					strcpy(tureUrl, a["downloadUrl"].GetString());
+				}
+			}
 		}
-		else
-		{
-			strcpy(tureUrl, u8"生成链接失败");
-			return false;
-		}
+
+		
+		//assert(a.IsObject());
+		//assert(a.HasMember("downloadUrl"));
+		//std::cout << "\n\ndownloadUrl: " << a["downloadUrl"].GetString() << std::endl;
+
+		////Json::Value jsonData;
+		////Json::Reader jsonReader;
+
+		////if (jsonReader.parse(*httpData, jsonData))
+		////{
+
+		//	std::string Json(jsonData.toStyledString());
+
+		//	//use regex to find the direct_download_link.
+		//	//std::string pattern("http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?");
+		//	std::string pattern("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]");
+		//	pattern = "[[:alpha:]]*" + pattern + "[[:alpha:]]*";
+		//	std::regex r(pattern);
+		//	std::sregex_iterator it(Json.begin(), Json.end(), r);
+
+		//	std::string temp(it->str());
+		//	strcpy(tureUrl, temp.c_str());
+
+		//}
+		//else
+		//{
+		//	strcpy(tureUrl, u8"生成链接失败");
+		//	return false;
+		//}
 	}
 	else
 	{
