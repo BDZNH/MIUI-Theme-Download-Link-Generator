@@ -50,49 +50,29 @@ bool Genarate(std::string Geturl, char * tureUrl)
 	{
 		rapidjson::Document document;
 		document.Parse(RequestData.c_str());
-		//assert(document.HasMember("apiData"));
-		if (document.HasMember("apiData"))
+		if (document.HasMember("apiData")) // check is there apidata
 		{
-			const rapidjson::Value& a = document["apiData"];
+			const rapidjson::Value& a = document["apiData"];  //get the apidata
 			if (a.IsObject())
 			{
 				if (a.HasMember("downloadUrl"))
 				{
-					//std::cout << "\n\ndownloadUrl: " << a["downloadUrl"].GetString() << std::endl;
 					strcpy(tureUrl, a["downloadUrl"].GetString());
 				}
+				else
+				{
+					strcpy(tureUrl, u8"啊哦 生成链接失败 看看是不是网络有问题或者链接错误");
+				}
+			}
+			else
+			{
+				strcpy(tureUrl, u8"啊哦 生成链接失败 看看是不是网络有问题或者链接错误");
 			}
 		}
-
-		
-		//assert(a.IsObject());
-		//assert(a.HasMember("downloadUrl"));
-		//std::cout << "\n\ndownloadUrl: " << a["downloadUrl"].GetString() << std::endl;
-
-		////Json::Value jsonData;
-		////Json::Reader jsonReader;
-
-		////if (jsonReader.parse(*httpData, jsonData))
-		////{
-
-		//	std::string Json(jsonData.toStyledString());
-
-		//	//use regex to find the direct_download_link.
-		//	//std::string pattern("http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?");
-		//	std::string pattern("(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]");
-		//	pattern = "[[:alpha:]]*" + pattern + "[[:alpha:]]*";
-		//	std::regex r(pattern);
-		//	std::sregex_iterator it(Json.begin(), Json.end(), r);
-
-		//	std::string temp(it->str());
-		//	strcpy(tureUrl, temp.c_str());
-
-		//}
-		//else
-		//{
-		//	strcpy(tureUrl, u8"生成链接失败");
-		//	return false;
-		//}
+		else
+		{
+			strcpy(tureUrl, u8"啊哦 生成链接失败 看看是不是网络有问题或者链接错误");
+		}
 	}
 	else
 	{

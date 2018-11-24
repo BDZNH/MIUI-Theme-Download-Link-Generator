@@ -1,12 +1,21 @@
-#define _CRT_NONSTDC_NO_WARNINGS
-//preprocessor definitions
+//preprocessor definitions start
 #ifdef _WIN32
+
+#ifndef _CRT_NONSTDC_NO_WARNINGS
+#define _CRT_NONSTDC_NO_WARNINGS
+#endif // !
+
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 
 #ifndef CURL_STATICLIB
 #define CURL_STATICLIB
 #endif // CURL_STATICLIB
 
 #endif // _WIN32
+
+//preprocessor definitions end
 
 #ifndef __GENERATE_H
 #define __GENERATE_H
@@ -21,7 +30,6 @@
 #include <cstring>
 
 #include <curl/curl.h>
-//#include <json/json.h>
 #include <rapidjson/document.h>
 
 
@@ -32,17 +40,13 @@
 #pragma comment(lib, "crypt32.lib")
 #pragma comment(lib, "Normaliz.lib")
 #pragma comment(lib, "winmm.lib")
+
 #ifdef _DEBUG
 #pragma comment(lib, "libcurl_a_debug.lib")
 #else
 #pragma comment(lib, "libcurl_a.lib")
 #endif // _DEBUG
 #endif // win32
-
-
-
-#pragma warning(disable : 4996)
-
 
 namespace
 {
