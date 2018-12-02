@@ -17,16 +17,11 @@
 
 //preprocessor definitions end
 
+
 #ifndef __GENERATE_H
 #define __GENERATE_H
 
-#include <cstdint>
-#include <iostream>
-#include <memory>
 #include <string>
-#include <regex>
-#include <fstream>
-#include <cstdlib>
 #include <cstring>
 
 #include <curl/curl.h>
@@ -63,5 +58,6 @@ namespace
 }
 
 bool Genarate(std::string Geturl, char * tureUrl);
+bool Generate(LPWSTR url);
 
 #endif

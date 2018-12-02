@@ -1,0 +1,12 @@
+#pragma once
+
+#include "resource.h"
+
+#define ID_BUTTON_OPENSTORE	1001
+#define ID_BUTTON_GENERATE	1002
+#define ID_BUTTON_COPY		1003
+#define ID_BUTTON_DOWNLOAD	1004
+#define ID_BUTTON_ABOUTME	1005
+
+#define ID_EDIT_STOREUTL	1201
+#define ID_EDIT_DOWNLINK	1202
