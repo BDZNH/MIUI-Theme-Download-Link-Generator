@@ -62,6 +62,9 @@ bool Generate(LPWSTR url)
 				if (a.HasMember("downloadUrl"))
 				{
 					strcpy(urlLink, a["downloadUrl"].GetString()); //success
+					DWORD dwNum = MultiByteToWideChar(CP_ACP, 0, urlLink, -1, NULL, 0);
+					MultiByteToWideChar(CP_ACP, 0, urlLink, -1, url, dwNum);
+					return true;
 				}
 				else
 				{
@@ -95,7 +98,23 @@ bool Generate(LPWSTR url)
 		return false;
 	}
 
-	DWORD dwNum = MultiByteToWideChar(CP_ACP, 0, urlLink, -1, NULL, 0);
-	MultiByteToWideChar(CP_ACP, 0, urlLink, -1, url, dwNum);
-	return true;
+}
+
+BOOL CopyToClipboard(HWND hWnd, const WCHAR* pszData, const int nDataLen)
+{
+	if (OpenClipboard(hWnd))
+	{
+		EmptyClipboard();
+		HGLOBAL clipbuffer;
+		char *buffer;
+		clipbuffer = GlobalAlloc(GMEM_DDESHARE, nDataLen + 1);
+		buffer = (char *)::GlobalLock(clipbuffer);
+		//strcpy(buffer, pszData);
+		sprintf(buffer, "%ws", pszData);
+		GlobalUnlock(clipbuffer);
+		SetClipboardData(CF_TEXT, clipbuffer);
+		CloseClipboard();
+		return TRUE;
+	}
+	return FALSE;
 }

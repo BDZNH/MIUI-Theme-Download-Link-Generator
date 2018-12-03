@@ -21,6 +21,8 @@
 #ifndef __GENERATE_H
 #define __GENERATE_H
 
+#include <Windows.h>
+
 #include <string>
 #include <cstring>
 
@@ -57,7 +59,7 @@ namespace
 	}
 }
 
-bool Genarate(std::string Geturl, char * tureUrl);
 bool Generate(LPWSTR url);
+BOOL CopyToClipboard(HWND hWnd, const WCHAR* pszData, const int nDataLen);
 
 #endif

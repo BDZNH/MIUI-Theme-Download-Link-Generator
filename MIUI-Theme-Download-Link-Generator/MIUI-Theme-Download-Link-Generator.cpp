@@ -30,6 +30,7 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
@@ -111,7 +112,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // 将实例句柄存储在全局变量中
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_SYSMENU | WS_MINIMIZEBOX,
-      100, 100, 574, 160, nullptr, nullptr, hInstance, nullptr);
+      320, 180, 574, 158, nullptr, nullptr, hInstance, nullptr);
 
    //HWND hwnd = CreateWindow(_T("ImGui Example"), _T("MIUI 主题下载链接生成"),
 	  // WS_SYSMENU | \
@@ -167,6 +168,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
 				delete []urlTheme;
 				break;
+			case ID_BUTTON_COPY:
+				urlTheme = new wchar_t[1000];
+				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
+				Generate(urlTheme);
+				SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
+				CopyToClipboard(hWnd, urlTheme, 998);
+				delete[]urlTheme;
+				break;
+			case ID_BUTTON_DOWNLOAD:
+				urlTheme = new wchar_t[1000];
+				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
+				Generate(urlTheme);
+				SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
+				ShellExecute(NULL, _T("open"), _T("explorer.exe"), urlTheme, NULL, SW_SHOW);
+				delete[]urlTheme;
+				break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
@@ -186,10 +203,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			hFont = CreateFont(-20/*高*/, -10/*宽*/, 0, 0, 0 /*700表示粗体*/,FALSE/*斜体?*/, FALSE/*下划线?*/, FALSE/*删除线?*/, DEFAULT_CHARSET,OUT_CHARACTER_PRECIS, CLIP_CHARACTER_PRECIS, DEFAULT_QUALITY,FF_DONTCARE, TEXT("微软雅黑"));
 
-			EDIT_STOREUTL		= CreateWindow(L"EDIT", L"粘贴主题链接", WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL , 7,  7, 544, 32, hWnd, NULL, NULL, NULL);
+			EDIT_STOREUTL		= CreateWindow(L"EDIT", L"粘贴主题链接", WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL , 7,  7, 542, 32, hWnd, NULL, NULL, NULL);
 			SendMessage(EDIT_STOREUTL, WM_SETFONT, (WPARAM)hFont, 1);
 
-			EDIT_EDIT_DOWNLINK	= CreateWindow(L"EDIT", L"生成的下载链接", WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL , 7, 43, 544, 32, hWnd, NULL, NULL, NULL);
+			EDIT_EDIT_DOWNLINK	= CreateWindow(L"EDIT", L"生成的下载链接", WS_CHILD | WS_VISIBLE |  ES_AUTOHSCROLL , 7, 43, 542, 32, hWnd, NULL, NULL, NULL);
 			SendMessage(EDIT_EDIT_DOWNLINK, WM_SETFONT, (WPARAM)hFont, 1);
 
 			hFontButton = CreateFont(-16/*高*/, -7/*宽*/, 0, 0, 0 /*700表示粗体*/, FALSE/*斜体?*/, FALSE/*下划线?*/, FALSE/*删除线?*/, DEFAULT_CHARSET, OUT_CHARACTER_PRECIS, CLIP_CHARACTER_PRECIS, DEFAULT_QUALITY, FF_DONTCARE, TEXT("微软雅黑"));
@@ -200,10 +217,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			BUTTON_GENERATE		= CreateWindow(L"BUTTON", L"生成链接", WS_CHILD | WS_VISIBLE | SS_CENTER, 140, 80, 110, 35, hWnd, (HMENU)ID_BUTTON_GENERATE, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(BUTTON_GENERATE, WM_SETFONT, (WPARAM)hFontButton, 1);
 
-			BUTTON_GENERATE = CreateWindow(L"BUTTON", L"复制", WS_CHILD | WS_VISIBLE | SS_CENTER, 254, 80, 96, 35, hWnd, (HMENU)ID_BUTTON_GENERATE, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
-			SendMessage(BUTTON_GENERATE, WM_SETFONT, (WPARAM)hFontButton, 1);
+			BUTTON_COPY = CreateWindow(L"BUTTON", L"复制", WS_CHILD | WS_VISIBLE | SS_CENTER, 254, 80, 96, 35, hWnd, (HMENU)ID_BUTTON_COPY, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			SendMessage(BUTTON_COPY, WM_SETFONT, (WPARAM)hFontButton, 1);
 
-			BUTTON_DOWNLOAD		= CreateWindow(L"BUTTON", L"下载", WS_CHILD | WS_VISIBLE | SS_CENTER, 354, 80, 96, 35, hWnd, NULL, NULL, NULL);
+			BUTTON_DOWNLOAD		= CreateWindow(L"BUTTON", L"下载", WS_CHILD | WS_VISIBLE | SS_CENTER, 354, 80, 96, 35, hWnd, (HMENU)ID_BUTTON_DOWNLOAD, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(BUTTON_DOWNLOAD, WM_SETFONT, (WPARAM)hFontButton, 1);
 
 			BUTTON_ABOUTME		= CreateWindow(L"BUTTON", L"关于", WS_CHILD | WS_VISIBLE | SS_CENTER, 454, 80, 97, 35, hWnd, (HMENU)ID_BUTTON_ABOUTME, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
@@ -212,7 +229,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
     case WM_DESTROY:
-		  DeleteObject(hFont);
+		DeleteObject(hFont);
+		DeleteObject(hFontButton);
         PostQuitMessage(0);
         break;
     default:
@@ -246,3 +264,4 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     }
     return (INT_PTR)FALSE;
 }
+
