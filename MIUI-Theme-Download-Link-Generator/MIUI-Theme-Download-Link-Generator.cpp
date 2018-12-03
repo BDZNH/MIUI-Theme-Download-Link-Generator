@@ -95,7 +95,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_MIUITHEMEDOWNLOADLINKGENERATOR);
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
-	DeleteObject(wcex.hbrBackground);
+	
     return RegisterClassExW(&wcex);
 }
 
