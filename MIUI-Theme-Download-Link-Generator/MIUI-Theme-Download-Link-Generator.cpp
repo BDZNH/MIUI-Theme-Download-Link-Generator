@@ -113,11 +113,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_SYSMENU | WS_MINIMIZEBOX,
       320, 180, 574, 158, nullptr, nullptr, hInstance, nullptr);
-
-   //HWND hwnd = CreateWindow(_T("ImGui Example"), _T("MIUI 主题下载链接生成"),
-	  // WS_SYSMENU | \
-	  // WS_MINIMIZEBOX, 100, 100, 1017, 158, NULL, NULL, wc.hInstance, NULL);
-
    if (!hWnd)
    {
       return FALSE;
