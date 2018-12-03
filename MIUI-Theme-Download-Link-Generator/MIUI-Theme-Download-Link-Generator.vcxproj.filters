@@ -56,4 +56,12 @@
     <None Include="..\readme.md" />
     <None Include="..\readme_zh.md" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="resource\Windows Background.wav">
+      <Filter>资源文件</Filter>
+    </Media>
+    <Media Include="resource\success.wav">
+      <Filter>资源文件</Filter>
+    </Media>
+  </ItemGroup>
 </Project>

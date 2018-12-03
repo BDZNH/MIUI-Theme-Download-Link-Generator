@@ -5,6 +5,8 @@
 #include "MIUI-Theme-Download-Link-Generator.h"
 #include "generate.h"
 
+#pragma comment(lib, "WINMM.LIB")
+
 #define MAX_LOADSTRING 100
 
 // 全局变量:
@@ -93,7 +95,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_MIUITHEMEDOWNLOADLINKGENERATOR);
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
-
+	DeleteObject(wcex.hbrBackground);
     return RegisterClassExW(&wcex);
 }
 
@@ -159,24 +161,43 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			case ID_BUTTON_GENERATE:
 				urlTheme = new wchar_t[1000];
 				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
-				Generate(urlTheme);
-				SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
+				if (Generate(urlTheme))
+				{
+					SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
+					PlaySound((LPCTSTR)IDR_WAVE_SUCCESS, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
+				}
+				else
+				{
+					PlaySound((LPCTSTR)IDR_WAVE_FAILED, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
+				}
 				delete []urlTheme;
 				break;
 			case ID_BUTTON_COPY:
 				urlTheme = new wchar_t[1000];
 				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
-				Generate(urlTheme);
-				SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
-				CopyToClipboard(hWnd, urlTheme, 998);
+				if (Generate(urlTheme) && CopyToClipboard(hWnd, urlTheme, 998))
+				{
+					SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
+					PlaySound((LPCTSTR)IDR_WAVE_SUCCESS, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
+				}
+				else
+				{
+					PlaySound((LPCTSTR)IDR_WAVE_FAILED, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
+				}
 				delete[]urlTheme;
 				break;
 			case ID_BUTTON_DOWNLOAD:
 				urlTheme = new wchar_t[1000];
 				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
-				Generate(urlTheme);
-				SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
-				ShellExecute(NULL, _T("open"), _T("explorer.exe"), urlTheme, NULL, SW_SHOW);
+				if (Generate(urlTheme))
+				{
+					SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
+					ShellExecute(NULL, _T("open"), _T("explorer.exe"), urlTheme, NULL, SW_SHOW);
+				}
+				else
+				{
+					PlaySound((LPCTSTR)IDR_WAVE_FAILED, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
+				}
 				delete[]urlTheme;
 				break;
             default:
@@ -215,7 +236,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			BUTTON_COPY = CreateWindow(L"BUTTON", L"复制", WS_CHILD | WS_VISIBLE | SS_CENTER, 254, 80, 96, 35, hWnd, (HMENU)ID_BUTTON_COPY, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(BUTTON_COPY, WM_SETFONT, (WPARAM)hFontButton, 1);
 
-			BUTTON_DOWNLOAD		= CreateWindow(L"BUTTON", L"下载", WS_CHILD | WS_VISIBLE | SS_CENTER, 354, 80, 96, 35, hWnd, (HMENU)ID_BUTTON_DOWNLOAD, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			BUTTON_DOWNLOAD		= CreateWindow(L"BUTTON", L"下载", WS_CHILD | WS_VISIBLE | SS_CENTER | BS_PUSHBUTTON, 354, 80, 96, 35, hWnd, (HMENU)ID_BUTTON_DOWNLOAD, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(BUTTON_DOWNLOAD, WM_SETFONT, (WPARAM)hFontButton, 1);
 
 			BUTTON_ABOUTME		= CreateWindow(L"BUTTON", L"关于", WS_CHILD | WS_VISIBLE | SS_CENTER, 454, 80, 97, 35, hWnd, (HMENU)ID_BUTTON_ABOUTME, ((LPCREATESTRUCT)lParam)->hInstance, NULL);

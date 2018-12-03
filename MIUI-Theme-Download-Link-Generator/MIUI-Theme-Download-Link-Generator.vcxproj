@@ -176,6 +176,10 @@
     <None Include="..\readme.md" />
     <None Include="..\readme_zh.md" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="resource\success.wav" />
+    <Media Include="resource\Windows Background.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
