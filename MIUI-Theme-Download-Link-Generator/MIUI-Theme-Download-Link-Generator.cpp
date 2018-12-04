@@ -3,7 +3,7 @@
 
 #include "header.h"
 #include "MIUI-Theme-Download-Link-Generator.h"
-#include "generate.h"
+#include "generate.h"							//解析直链
 
 #pragma comment(lib, "WINMM.LIB")//播放声音
 
