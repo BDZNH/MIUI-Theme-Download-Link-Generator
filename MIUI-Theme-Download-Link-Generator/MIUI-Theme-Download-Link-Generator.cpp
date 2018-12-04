@@ -140,6 +140,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	static HFONT hFont ;
 	static HFONT hFontButton;
+	HDC hdcStatic;
 	LPWSTR urlTheme;
     switch (message)
     {
@@ -206,6 +207,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
+	case WM_CTLCOLORSTATIC:
+		hdcStatic = (HDC)wParam;
+		//SetTextColor(hdcStatic, RGB(255, 255, 255)); //白色
+		SetBkColor(hdcStatic, RGB(255, 255, 255)); //翠绿色
+		break;
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
@@ -223,7 +229,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			EDIT_STOREUTL		= CreateWindow(L"EDIT", L"粘贴主题链接", WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL , 7,  8, 542, 28, hWnd, (HMENU)ID_EDIT_STOREUTL, NULL, NULL);
 			SendMessage(EDIT_STOREUTL, WM_SETFONT, (WPARAM)hFont, 1);
 
-			EDIT_EDIT_DOWNLINK	= CreateWindow(L"EDIT", L"生成的下载链接", WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL , 7, 43, 542, 28, hWnd, NULL, NULL, NULL);
+			CreateWindow(L"STATIC", NULL, WS_CHILD | WS_VISIBLE , 7, 43, 542, 28, hWnd, NULL, NULL, NULL);
+			EDIT_EDIT_DOWNLINK	= CreateWindow(L"EDIT", L"生成的下载链接", WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL | ES_READONLY, 7, 43, 542, 28, hWnd, NULL, NULL, NULL);
 			SendMessage(EDIT_EDIT_DOWNLINK, WM_SETFONT, (WPARAM)hFont, 1);
 
 			hFontButton = CreateFont(-16/*高*/, -7/*宽*/, 0, 0, 0 /*700表示粗体*/, FALSE/*斜体?*/, FALSE/*下划线?*/, FALSE/*删除线?*/, DEFAULT_CHARSET, OUT_CHARACTER_PRECIS, CLIP_CHARACTER_PRECIS, DEFAULT_QUALITY, FF_DONTCARE, TEXT("微软雅黑"));
