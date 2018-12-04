@@ -5,7 +5,7 @@
 #include "MIUI-Theme-Download-Link-Generator.h"
 #include "generate.h"
 
-#pragma comment(lib, "WINMM.LIB")
+#pragma comment(lib, "WINMM.LIB")//播放声音
 
 #define MAX_LOADSTRING 100
 
@@ -113,7 +113,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // 将实例句柄存储在全局变量中
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_SYSMENU | WS_MINIMIZEBOX,
+   HWND hWnd = CreateWindowW(szWindowClass, L"MIUI主题下载直链", WS_SYSMENU | WS_MINIMIZEBOX,
       320, 180, 574, 158, nullptr, nullptr, hInstance, nullptr);
    if (!hWnd)
    {
@@ -219,27 +219,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			hFont = CreateFont(-20/*高*/, -10/*宽*/, 0, 0, 0 /*700表示粗体*/,FALSE/*斜体?*/, FALSE/*下划线?*/, FALSE/*删除线?*/, DEFAULT_CHARSET,OUT_CHARACTER_PRECIS, CLIP_CHARACTER_PRECIS, DEFAULT_QUALITY,FF_DONTCARE, TEXT("微软雅黑"));
 
-			EDIT_STOREUTL		= CreateWindow(L"EDIT", L"粘贴主题链接", WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL , 7,  7, 542, 32, hWnd, NULL, NULL, NULL);
+			EDIT_STOREUTL		= CreateWindow(L"EDIT", L"粘贴主题链接", WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL , 7,  8, 542, 28, hWnd, (HMENU)ID_EDIT_STOREUTL, NULL, NULL);
 			SendMessage(EDIT_STOREUTL, WM_SETFONT, (WPARAM)hFont, 1);
 
-			EDIT_EDIT_DOWNLINK	= CreateWindow(L"EDIT", L"生成的下载链接", WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL , 7, 43, 542, 32, hWnd, NULL, NULL, NULL);
+			EDIT_EDIT_DOWNLINK	= CreateWindow(L"EDIT", L"生成的下载链接", WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL , 7, 43, 542, 28, hWnd, NULL, NULL, NULL);
 			SendMessage(EDIT_EDIT_DOWNLINK, WM_SETFONT, (WPARAM)hFont, 1);
 
 			hFontButton = CreateFont(-16/*高*/, -7/*宽*/, 0, 0, 0 /*700表示粗体*/, FALSE/*斜体?*/, FALSE/*下划线?*/, FALSE/*删除线?*/, DEFAULT_CHARSET, OUT_CHARACTER_PRECIS, CLIP_CHARACTER_PRECIS, DEFAULT_QUALITY, FF_DONTCARE, TEXT("微软雅黑"));
 
-			BUTTON_OPENSTORE	= CreateWindow(L"BUTTON", L"打开主题商店", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 6, 80, 130, 35, hWnd, (HMENU)ID_BUTTON_OPENSTORE, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			BUTTON_OPENSTORE	= CreateWindow(L"BUTTON", L"打开主题商店", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 6, 78, 130, 35, hWnd, (HMENU)ID_BUTTON_OPENSTORE, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(BUTTON_OPENSTORE, WM_SETFONT, (WPARAM)hFontButton, 1);
 
-			BUTTON_GENERATE		= CreateWindow(L"BUTTON", L"生成链接", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER | BS_DEFPUSHBUTTON, 140, 80, 110, 35, hWnd, (HMENU)ID_BUTTON_GENERATE, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			BUTTON_GENERATE		= CreateWindow(L"BUTTON", L"生成链接", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER , 140, 78, 110, 35, hWnd, (HMENU)ID_BUTTON_GENERATE, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(BUTTON_GENERATE, WM_SETFONT, (WPARAM)hFontButton, 1);
 
-			BUTTON_COPY = CreateWindow(L"BUTTON", L"复制", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 254, 80, 96, 35, hWnd, (HMENU)ID_BUTTON_COPY, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			BUTTON_COPY = CreateWindow(L"BUTTON", L"复制", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 254, 78, 96, 35, hWnd, (HMENU)ID_BUTTON_COPY, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(BUTTON_COPY, WM_SETFONT, (WPARAM)hFontButton, 1);
 
-			BUTTON_DOWNLOAD		= CreateWindow(L"BUTTON", L"下载", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 354, 80, 96, 35, hWnd, (HMENU)ID_BUTTON_DOWNLOAD, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			BUTTON_DOWNLOAD		= CreateWindow(L"BUTTON", L"下载", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 354, 78, 96, 35, hWnd, (HMENU)ID_BUTTON_DOWNLOAD, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(BUTTON_DOWNLOAD, WM_SETFONT, (WPARAM)hFontButton, 1);
 
-			BUTTON_ABOUTME		= CreateWindow(L"BUTTON", L"关于", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 454, 80, 97, 35, hWnd, (HMENU)ID_BUTTON_ABOUTME, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			BUTTON_ABOUTME		= CreateWindow(L"BUTTON", L"关于", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 454, 78, 97, 35, hWnd, (HMENU)ID_BUTTON_ABOUTME, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(BUTTON_ABOUTME, WM_SETFONT, (WPARAM)hFontButton, 1);
 
 		}
