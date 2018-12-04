@@ -163,13 +163,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
 				if (Generate(urlTheme))
 				{
-					SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
 					PlaySound((LPCTSTR)IDR_WAVE_SUCCESS, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
 				}
 				else
 				{
 					PlaySound((LPCTSTR)IDR_WAVE_FAILED, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
 				}
+				SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
 				delete []urlTheme;
 				break;
 			case ID_BUTTON_COPY:
@@ -177,13 +177,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
 				if (Generate(urlTheme) && CopyToClipboard(hWnd, urlTheme, 998))
 				{
-					SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
 					PlaySound((LPCTSTR)IDR_WAVE_SUCCESS, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
 				}
 				else
 				{
 					PlaySound((LPCTSTR)IDR_WAVE_FAILED, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
 				}
+				SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
 				delete[]urlTheme;
 				break;
 			case ID_BUTTON_DOWNLOAD:
@@ -196,6 +196,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				}
 				else
 				{
+					SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
 					PlaySound((LPCTSTR)IDR_WAVE_FAILED, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
 				}
 				delete[]urlTheme;
