@@ -2,18 +2,23 @@
 
 bool Generate(LPWSTR url)
 {
-	char ccurl[1000];
+	bool flag = false;
+	//char ccurl[1000];
+	char *ccurl = new char[1000];
 	sprintf(ccurl, "%ws", url);
 	const char urlTheme[] = "http://zhuti.xiaomi.com/detail/";
-	char urlLink[1000] = "http://thm.market.xiaomi.com/thm/download/v2/";
+	//char urlLink[1000] = "http://thm.market.xiaomi.com/thm/download/v2/";
+	char *urlLink = new char[1000];
+	strcpy(urlLink, "http://thm.market.xiaomi.com/thm/download/v2/");
 	//char directLink[1000];
 	size_t len = strlen(urlLink);
 	if (strlen(ccurl) < strlen(urlTheme))
 	{
-		strcpy(urlLink, "啊哦，链接有误");
-		DWORD dwNum = MultiByteToWideChar(CP_ACP, 0, urlLink, -1, NULL, 0); 
+		flag = false;
+		strcpy(urlLink, "啊哦 生成链接失败 看看是不是网络有问题或者链接错误");
+		DWORD dwNum = MultiByteToWideChar(CP_ACP, 0, urlLink, -1, NULL, 0);
 		MultiByteToWideChar(CP_ACP, 0, urlLink, -1, url, dwNum);
-		return 0;
+		return flag;
 	}
 	char *p = &urlLink[len];
 	strcpy(p, ccurl + (strlen(urlTheme)));
@@ -61,43 +66,41 @@ bool Generate(LPWSTR url)
 			{
 				if (a.HasMember("downloadUrl"))
 				{
+					flag = true;
 					strcpy(urlLink, a["downloadUrl"].GetString()); //success
-					DWORD dwNum = MultiByteToWideChar(CP_ACP, 0, urlLink, -1, NULL, 0);
-					MultiByteToWideChar(CP_ACP, 0, urlLink, -1, url, dwNum);
-					return true;
 				}
 				else
 				{
-					strcpy(urlLink, "啊哦 生成链接失败 看看是不是网络有问题或者链接错误");
-					DWORD dwNum = MultiByteToWideChar(CP_ACP, 0, urlLink, -1, NULL, 0); 
-					MultiByteToWideChar(CP_ACP, 0, urlLink, -1, url, dwNum);
-					return false;
+					flag = false;
 				}
 			}
 			else
 			{
-				strcpy(urlLink, "啊哦 生成链接失败 看看是不是网络有问题或者链接错误");
-				DWORD dwNum = MultiByteToWideChar(CP_ACP, 0, urlLink, -1, NULL, 0); 
-				MultiByteToWideChar(CP_ACP, 0, urlLink, -1, url, dwNum);
-				return false;
+				flag = false;
 			}
 		}
 		else
 		{
-			strcpy(urlLink, "啊哦 生成链接失败 看看是不是网络有问题或者链接错误");
-			DWORD dwNum = MultiByteToWideChar(CP_ACP, 0, urlLink, -1, NULL, 0); 
-			MultiByteToWideChar(CP_ACP, 0, urlLink, -1, url, dwNum);
-			return false;
+			flag = false;
 		}
 	}
 	else
 	{
+		flag = false;
+	}
+	if (!flag)
+	{
 		strcpy(urlLink, "啊哦 生成链接失败 看看是不是网络有问题或者链接错误");
-		DWORD dwNum = MultiByteToWideChar(CP_ACP, 0, urlLink, -1, NULL, 0); 
-		MultiByteToWideChar(CP_ACP, 0, urlLink, -1, url, dwNum);
-		return false;
 	}
 
+	//char to wchar
+	DWORD dwNum = MultiByteToWideChar(CP_ACP, 0, urlLink, -1, NULL, 0);
+	MultiByteToWideChar(CP_ACP, 0, urlLink, -1, url, dwNum);
+
+
+	delete[] urlLink;
+	delete[] urlTheme;
+	return flag;
 }
 
 BOOL CopyToClipboard(HWND hWnd, const WCHAR* pszData, const int nDataLen)

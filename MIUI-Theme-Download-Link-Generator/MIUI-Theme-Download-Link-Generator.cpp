@@ -160,7 +160,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				ShellExecute(NULL, _T("open"), _T("explorer.exe"), _T("http://zhuti.xiaomi.com/"), NULL, SW_SHOW);
 				break;
 			case ID_BUTTON_GENERATE:
-				urlTheme = new wchar_t[1000];
+				urlTheme = new WCHAR[1000];
 				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
 				if (Generate(urlTheme))
 				{
@@ -171,10 +171,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					PlaySound((LPCTSTR)IDR_WAVE_FAILED, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
 				}
 				SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
-				delete []urlTheme;
+				delete [] urlTheme;
 				break;
 			case ID_BUTTON_COPY:
-				urlTheme = new wchar_t[1000];
+				urlTheme = new WCHAR[1000];
 				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
 				if (Generate(urlTheme) && CopyToClipboard(hWnd, urlTheme, 998))
 				{
@@ -185,10 +185,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					PlaySound((LPCTSTR)IDR_WAVE_FAILED, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
 				}
 				SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
-				delete[]urlTheme;
+				delete[] urlTheme;
 				break;
 			case ID_BUTTON_DOWNLOAD:
-				urlTheme = new wchar_t[1000];
+				urlTheme = new WCHAR[1000];
 				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
 				if (Generate(urlTheme))
 				{
@@ -200,7 +200,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
 					PlaySound((LPCTSTR)IDR_WAVE_FAILED, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
 				}
-				delete[]urlTheme;
+				delete[] urlTheme;
 				break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
@@ -209,8 +209,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 	case WM_CTLCOLORSTATIC:
 		hdcStatic = (HDC)wParam;
-		//SetTextColor(hdcStatic, RGB(255, 255, 255)); //白色
-		SetBkColor(hdcStatic, RGB(255, 255, 255)); //翠绿色
+		//将STATIC控件背景色设置为白色，设置edit控件为readonly时显示的就是static的颜色了，间接把edit变白
+		SetBkColor(hdcStatic, RGB(255, 255, 255)); 
 		break;
     case WM_PAINT:
         {
