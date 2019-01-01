@@ -3,14 +3,14 @@
 bool Generate(LPWSTR url)
 {
 	bool flag = false;
-	//char ccurl[1000];
-	char *ccurl = new char[1000];
+
+	char *ccurl = new char[300];
 	sprintf(ccurl, "%ws", url);
+
 	const char urlTheme[] = "http://zhuti.xiaomi.com/detail/";
-	//char urlLink[1000] = "http://thm.market.xiaomi.com/thm/download/v2/";
-	char *urlLink = new char[1000];
+
+	char *urlLink = new char[300];
 	strcpy(urlLink, "http://thm.market.xiaomi.com/thm/download/v2/");
-	//char directLink[1000];
 	size_t len = strlen(urlLink);
 	if (strlen(ccurl) < strlen(urlTheme))
 	{
@@ -99,7 +99,7 @@ bool Generate(LPWSTR url)
 
 
 	delete[] urlLink;
-	delete[] urlTheme;
+	delete[] ccurl;
 	return flag;
 }
 

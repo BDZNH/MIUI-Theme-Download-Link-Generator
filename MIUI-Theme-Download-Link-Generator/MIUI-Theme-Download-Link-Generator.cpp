@@ -160,8 +160,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				ShellExecute(NULL, _T("open"), _T("explorer.exe"), _T("http://zhuti.xiaomi.com/"), NULL, SW_SHOW);
 				break;
 			case ID_BUTTON_GENERATE:
-				urlTheme = new WCHAR[1000];
-				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
+				urlTheme = new WCHAR[300];
+				GetWindowText(EDIT_STOREUTL, urlTheme, 300);
 				if (Generate(urlTheme))
 				{
 					PlaySound((LPCTSTR)IDR_WAVE_SUCCESS, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
@@ -174,9 +174,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				delete [] urlTheme;
 				break;
 			case ID_BUTTON_COPY:
-				urlTheme = new WCHAR[1000];
-				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
-				if (Generate(urlTheme) && CopyToClipboard(hWnd, urlTheme, 998))
+				urlTheme = new WCHAR[300];
+				GetWindowText(EDIT_STOREUTL, urlTheme, 300);
+				if (Generate(urlTheme) && CopyToClipboard(hWnd, urlTheme, 298))
 				{
 					PlaySound((LPCTSTR)IDR_WAVE_SUCCESS, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
 				}
@@ -188,8 +188,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				delete[] urlTheme;
 				break;
 			case ID_BUTTON_DOWNLOAD:
-				urlTheme = new WCHAR[1000];
-				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
+				urlTheme = new WCHAR[300];
+				GetWindowText(EDIT_STOREUTL, urlTheme, 300);
 				if (Generate(urlTheme))
 				{
 					SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
