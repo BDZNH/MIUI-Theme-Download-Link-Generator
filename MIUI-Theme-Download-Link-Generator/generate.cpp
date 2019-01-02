@@ -1,5 +1,10 @@
 #include "generate.h"
 
+long long ddlnow = 0;
+BOOL isRuning;
+char dLinktemp[300];
+
+
 bool Generate(LPWSTR url)
 {
 	bool flag = false;
@@ -120,4 +125,82 @@ BOOL CopyToClipboard(HWND hWnd, const WCHAR* pszData, const int nDataLen)
 		return TRUE;
 	}
 	return FALSE;
+}
+
+
+struct myprogress {
+	curl_off_t lastruntime; /* type depends on version, see above */
+	CURL *curl;
+};
+
+size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *stream) {
+	size_t written = fwrite(ptr, size, nmemb, stream);
+	return written;
+}
+
+/* this is how the CURLOPT_XFERINFOFUNCTION callback works */
+static int xferinfo(void *p,
+	curl_off_t dltotal, curl_off_t dlnow,
+	curl_off_t ultotal, curl_off_t ulnow)
+{
+	
+
+	if (dlnow - ddlnow > dltotal / 100.0)
+	{
+		ddlnow = (dlnow * 100 / dltotal);
+	}
+
+	if (isRuning==false)
+		return 1;
+	return 0;
+}
+
+
+DWORD WINAPI download(void)
+{
+	CURL *curl;
+	CURLcode res = CURLE_OK;
+	struct myprogress prog;
+	FILE *fp;
+	
+	char path[255];
+
+
+	curl = curl_easy_init();
+	if (curl) {
+		fp = fopen("softrain.mtz", "wb");
+		prog.lastruntime = 0;
+		prog.curl = curl;
+
+		curl_easy_setopt(curl, CURLOPT_URL, dLinktemp);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+
+		/* xferinfo was introduced in 7.32.0, no earlier libcurl versions will
+		   compile as they won't have the symbols around.*/
+
+
+		curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, xferinfo);
+		/* pass the struct pointer into the xferinfo function, note that this is
+		   an alias to CURLOPT_PROGRESSDATA */
+		curl_easy_setopt(curl, CURLOPT_XFERINFODATA, &prog);
+
+
+		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
+		res = curl_easy_perform(curl);
+
+		if (res == CURLE_OK)
+		{
+			fclose(fp);
+			MessageBox(NULL, L"Down finished", L"Download Thread", MB_OK);
+			
+		}
+			
+
+		/* always cleanup */
+		isRuning=false;
+		curl_easy_cleanup(curl);
+	}
+	
+	return (DWORD)res;
 }
