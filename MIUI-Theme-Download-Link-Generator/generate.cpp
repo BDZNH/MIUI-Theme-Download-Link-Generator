@@ -1,8 +1,8 @@
 #include "generate.h"
 
-long long ddlnow = 0;
-BOOL isRuning;
-char dLinktemp[300];
+long long ddlnow = 0;				//下载进度
+bool isRuning;						//下载线程状态
+char dLinktemp[300];				//用一个全局变量来保存生成的链接
 
 
 bool Generate(LPWSTR url)
@@ -73,6 +73,7 @@ bool Generate(LPWSTR url)
 				{
 					flag = true;
 					strcpy(urlLink, a["downloadUrl"].GetString()); //success
+					strcpy(dLinktemp, urlLink);
 				}
 				else
 				{
@@ -104,7 +105,7 @@ bool Generate(LPWSTR url)
 
 
 	delete[] urlLink;
-	delete[] urlTheme;
+	delete[] ccurl;
 	return flag;
 }
 
@@ -128,15 +129,7 @@ BOOL CopyToClipboard(HWND hWnd, const WCHAR* pszData, const int nDataLen)
 }
 
 
-struct myprogress {
-	curl_off_t lastruntime; /* type depends on version, see above */
-	CURL *curl;
-};
 
-size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *stream) {
-	size_t written = fwrite(ptr, size, nmemb, stream);
-	return written;
-}
 
 /* this is how the CURLOPT_XFERINFOFUNCTION callback works */
 static int xferinfo(void *p,
@@ -151,7 +144,7 @@ static int xferinfo(void *p,
 	}
 
 	if (isRuning==false)
-		return 1;
+		return CURLE_UNSUPPORTED_PROTOCOL;
 	return 0;
 }
 
@@ -162,8 +155,9 @@ DWORD WINAPI download(void)
 	CURLcode res = CURLE_OK;
 	struct myprogress prog;
 	FILE *fp;
+	ddlnow = 0;
 	
-	char path[255];
+	//char path[255];
 
 
 	curl = curl_easy_init();
@@ -188,19 +182,15 @@ DWORD WINAPI download(void)
 
 		curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
 		res = curl_easy_perform(curl);
-
+		fclose(fp);
 		if (res == CURLE_OK)
 		{
-			fclose(fp);
 			MessageBox(NULL, L"Down finished", L"Download Thread", MB_OK);
-			
 		}
-			
 
 		/* always cleanup */
 		isRuning=false;
 		curl_easy_cleanup(curl);
 	}
-	
 	return (DWORD)res;
 }

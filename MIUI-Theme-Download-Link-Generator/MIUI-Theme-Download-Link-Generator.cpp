@@ -5,7 +5,8 @@
 #include "MIUI-Theme-Download-Link-Generator.h"
 #include "generate.h"							//解析直链
 
-#pragma comment(lib, "WINMM.LIB")//播放声音
+#pragma comment(lib, "WINMM.LIB")				//播放声音
+#pragma comment(lib, "comctl32")				//进度条
 
 #define MAX_LOADSTRING 100
 
@@ -14,16 +15,20 @@ HINSTANCE hInst;                                // 当前实例
 WCHAR szTitle[MAX_LOADSTRING];                  // 标题栏文本
 WCHAR szWindowClass[MAX_LOADSTRING];            // 主窗口类名
 
-HWND BUTTON_OPENSTORE;
-HWND BUTTON_GENERATE;
-HWND BUTTON_COPY;
-HWND BUTTON_DOWNLOAD;
-HWND BUTTON_ABOUTME;
-
-static HWND EDIT_STOREUTL;
-static HWND EDIT_EDIT_DOWNLINK;
+HWND BUTTON_OPENSTORE;							// 打开商店按钮
+HWND BUTTON_GENERATE;							//生成链接按钮
+HWND BUTTON_COPY;								//复制按钮
+HWND BUTTON_DOWNLOAD;							//下载按钮
+HWND BUTTON_ABOUTME;							//关于我按钮
+HWND dlProcessBar;								//下载进度条
 
 
+static HWND EDIT_STOREUTL;						//主题链接编辑框
+static HWND EDIT_EDIT_DOWNLINK;					//下载链接编辑框
+
+extern long long ddlnow;						//下载进度
+extern bool isRuning;							//下载线程状态
+BOOL isFirtClick;								//是否是第一次点击下载按钮
 
 
 // 此代码模块中包含的函数的前向声明:
@@ -31,7 +36,7 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
-
+DWORD WINAPI PBThreadProc(LPVOID lpParameter);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -42,6 +47,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: 在此处放置代码。
+	isFirtClick = true;
 
     // 初始化全局字符串
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -138,10 +144,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	static HFONT hFont ;
-	static HFONT hFontButton;
+	static HFONT hFont ;				//编辑框字体
+	static HFONT hFontButton;			//按钮字体
 	HDC hdcStatic;
-	LPWSTR urlTheme;
+	LPWSTR urlTheme;					//存放链接
+
+	static RECT rc;
+	static size_t x, y, h, w;
     switch (message)
     {
     case WM_COMMAND:
@@ -188,12 +197,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				delete[] urlTheme;
 				break;
 			case ID_BUTTON_DOWNLOAD:
+
 				urlTheme = new WCHAR[1000];
 				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
 				if (Generate(urlTheme))
 				{
 					SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
-					ShellExecute(NULL, _T("open"), _T("explorer.exe"), urlTheme, NULL, SW_SHOW);
+					//ShellExecute(NULL, _T("open"), _T("explorer.exe"), urlTheme, NULL, SW_SHOW);
+					if (isFirtClick)
+					{
+						GetWindowRect(hWnd, &rc);
+						MoveWindow(hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top + 27, true);
+						dlProcessBar = CreateWindowEx(0, PROGRESS_CLASS, NULL, WS_CHILD | WS_VISIBLE, 7, 119, 543, 20, hWnd, (HMENU)0, NULL, NULL);
+						isFirtClick = false;
+					}
+					if (isRuning == true)
+					{
+						Sleep(500);
+					}
+					isRuning = true;
+					CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PBThreadProc, dlProcessBar, 0, 0);
+					CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)download, dlProcessBar, 0, 0);
 				}
 				else
 				{
@@ -201,6 +225,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					PlaySound((LPCTSTR)IDR_WAVE_FAILED, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
 				}
 				delete[] urlTheme;
+				
 				break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
@@ -255,6 +280,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
 		DeleteObject(hFont);
 		DeleteObject(hFontButton);
+		
         PostQuitMessage(0);
         break;
     default:
@@ -289,3 +315,35 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     return (INT_PTR)FALSE;
 }
 
+
+
+DWORD WINAPI PBThreadProc(LPVOID lpParameter)
+{
+	HWND hwndPB = (HWND)lpParameter;    //进度条的窗口句柄
+	PBRANGE range;                        //进度条的范围
+
+	SendMessage(hwndPB, PBM_SETRANGE,    //设置进度条的范围
+		(WPARAM)0, (LPARAM)(MAKELPARAM(0, 100)));
+
+	SendMessage(hwndPB, PBM_GETRANGE,    //获取进度条的范围
+		(WPARAM)TRUE,                    //TRUE 表示返回值为范围的最小值,FALSE表示返回最大值
+		(LPARAM)&range);
+	static int i = 0;
+	while (isRuning)
+	{
+		SendMessage(hwndPB, PBM_SETPOS, (WPARAM)(ddlnow), (LPARAM)0);
+		if (SendMessage(hwndPB, PBM_GETPOS, (WPARAM)0, (LPARAM)0) //取得进度条当前位置
+			== range.iHigh)
+		{
+			SendMessage(hwndPB, PBM_SETPOS, (WPARAM)range.iLow, (LPARAM)0); //将进度条复位
+			ddlnow = 0;
+		}
+		//UpdateWindow(hwndPB);
+		Sleep(20);
+	}
+
+	SendMessage(hwndPB, PBM_SETPOS, //设置进度条的新位置为当前位置加上范围的1/20
+		(WPARAM)(0), (LPARAM)0);
+	i = 0;
+	return 0;
+}

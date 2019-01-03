@@ -57,9 +57,20 @@ namespace
 		out->append(in, totalBytes);
 		return totalBytes;
 	}
+
+	struct myprogress {
+		curl_off_t lastruntime; /* type depends on version, see above */
+		CURL *curl;
+	};
+
+	size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *stream) {
+		size_t written = fwrite(ptr, size, nmemb, stream);
+		return written;
+	}
 }
 
 bool Generate(LPWSTR url);
 BOOL CopyToClipboard(HWND hWnd, const WCHAR* pszData, const int nDataLen);
+DWORD WINAPI download(void);
 
 #endif
