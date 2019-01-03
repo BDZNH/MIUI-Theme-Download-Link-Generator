@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="urlDecode">
+      <UniqueIdentifier>{8b336427-4c69-481a-96b8-7739ff6b648d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="generator and downloader">
+      <UniqueIdentifier>{3e3c2834-ff17-4784-bc8f-9621f933fe2f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.h">
@@ -27,16 +33,22 @@
     <ClInclude Include="MIUI-Theme-Download-Link-Generator.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="urlcoding.h">
+      <Filter>urlDecode</Filter>
+    </ClInclude>
     <ClInclude Include="generate.h">
-      <Filter>头文件</Filter>
+      <Filter>generator and downloader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MIUI-Theme-Download-Link-Generator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="urlcodeing.cpp">
+      <Filter>urlDecode</Filter>
+    </ClCompile>
     <ClCompile Include="generate.cpp">
-      <Filter>源文件</Filter>
+      <Filter>generator and downloader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

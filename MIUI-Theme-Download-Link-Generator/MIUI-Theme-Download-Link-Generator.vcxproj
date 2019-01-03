@@ -160,10 +160,12 @@
     <ClInclude Include="MIUI-Theme-Download-Link-Generator.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="urlcoding.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="generate.cpp" />
     <ClCompile Include="MIUI-Theme-Download-Link-Generator.cpp" />
+    <ClCompile Include="urlcodeing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MIUI-Theme-Download-Link-Generator.rc" />

@@ -29,6 +29,10 @@
 #include <curl/curl.h>
 #include <rapidjson/document.h>
 
+#include "urlcoding.h"
+#include "resource.h"
+#include "header.h"
+
 
 // additional dependencies
 #ifdef _WIN32
@@ -37,6 +41,7 @@
 #pragma comment(lib, "crypt32.lib")
 #pragma comment(lib, "Normaliz.lib")
 #pragma comment(lib, "winmm.lib")
+#pragma comment(lib, "WINMM.LIB")
 
 #ifdef _DEBUG
 #pragma comment(lib, "libcurl_a_debug.lib")

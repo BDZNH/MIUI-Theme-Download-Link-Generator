@@ -157,12 +157,11 @@ DWORD WINAPI download(void)
 	FILE *fp;
 	ddlnow = 0;
 	
-	//char path[255];
-
-
+	strCoding urlDecode;
+	std::string fileName = urlDecode.getName(dLinktemp);
 	curl = curl_easy_init();
 	if (curl) {
-		fp = fopen("softrain.mtz", "wb");
+		fp = fopen(fileName.c_str(), "wb");
 		prog.lastruntime = 0;
 		prog.curl = curl;
 
@@ -185,7 +184,8 @@ DWORD WINAPI download(void)
 		fclose(fp);
 		if (res == CURLE_OK)
 		{
-			MessageBox(NULL, L"Down finished", L"Download Thread", MB_OK);
+			PlaySound((LPCTSTR)IDR_WAVE_SUCCESS, nullptr, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
+			MessageBox(NULL, L"œ¬‘ÿÕÍ≥…", L"Hello", MB_OK);
 		}
 
 		/* always cleanup */
