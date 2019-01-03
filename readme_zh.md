@@ -9,6 +9,12 @@
 　
 ![失败2](https://i.loli.net/2018/12/04/5c05de40793c0.jpg)
 
+## 下载中
+
+![fineshed10.jpg](https://i.loli.net/2019/01/03/5c2df8f4e8b83.jpg)
+
+![finished7.png](https://i.loli.net/2019/01/03/5c2df8f5355e2.png)
+
 -----
 如果你想自己编译的话，你需要 [libcurl](https://curl.haxx.se/download.html) 。
 
