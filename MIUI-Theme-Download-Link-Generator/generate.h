@@ -76,6 +76,6 @@ namespace
 
 bool Generate(LPWSTR url);
 BOOL CopyToClipboard(HWND hWnd, const WCHAR* pszData, const int nDataLen);
-DWORD WINAPI download(void);
+DWORD WINAPI download(LPVOID lpParameter);
 
 #endif

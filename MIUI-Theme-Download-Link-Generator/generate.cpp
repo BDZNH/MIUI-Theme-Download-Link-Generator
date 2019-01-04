@@ -149,13 +149,15 @@ static int xferinfo(void *p,
 }
 
 
-DWORD WINAPI download(void)
+DWORD WINAPI download(LPVOID lpParameter)
 {
 	CURL *curl;
 	CURLcode res = CURLE_OK;
 	struct myprogress prog;
 	FILE *fp;
 	ddlnow = 0;
+
+	HWND hWnd = (HWND)lpParameter;
 	
 	strCoding urlDecode;
 	std::string fileName = urlDecode.getName(dLinktemp);
@@ -185,7 +187,7 @@ DWORD WINAPI download(void)
 		if (res == CURLE_OK)
 		{
 			PlaySound((LPCTSTR)IDR_WAVE_SUCCESS, nullptr, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
-			MessageBox(NULL, L"下载完成", L"Hello", MB_OK);
+			MessageBox(hWnd, L"下载完成", L"Hello", MB_OK);
 		}
 
 		/* always cleanup */
@@ -194,3 +196,5 @@ DWORD WINAPI download(void)
 	}
 	return (DWORD)res;
 }
+
+
