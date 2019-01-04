@@ -15,6 +15,10 @@
 
 ![finished7.png](https://i.loli.net/2019/01/03/5c2df8f5355e2.png)
 
+## Animation
+
+![bandicam-2019-01-04-22-05-27-489_1.gif](https://i.loli.net/2019/01/04/5c2f6d0279a8f.gif)
+
 -----
 如果你想自己编译的话，你需要 [libcurl](https://curl.haxx.se/download.html) 。
 

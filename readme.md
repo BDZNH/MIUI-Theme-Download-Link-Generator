@@ -14,6 +14,10 @@
 ![fineshed10.jpg](https://i.loli.net/2019/01/03/5c2df8f4e8b83.jpg)
 
 ![finished7.png](https://i.loli.net/2019/01/03/5c2df8f5355e2.png)
+
+## Animation
+
+![bandicam-2019-01-04-22-05-27-489_1.gif](https://i.loli.net/2019/01/04/5c2f6d0279a8f.gif)
 -----
 If you want to compile it by yourself. You need [libcurl](https://curl.haxx.se/download.html) installed.
 
