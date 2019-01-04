@@ -205,13 +205,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				delete[] urlTheme;
 				break;
 			case ID_BUTTON_DOWNLOAD:
-				//TaskbarList->SetProgressValue(hWnd, 50, 100);
 				urlTheme = new WCHAR[1000];
 				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
 				if (Generate(urlTheme))
 				{
 					SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
-					//ShellExecute(NULL, _T("open"), _T("explorer.exe"), urlTheme, NULL, SW_SHOW);
 					if (isFirtClick)
 					{
 						GetWindowRect(hWnd, &rc);
@@ -221,11 +219,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					}
 					if (isRuning == true)
 					{
+						isRuning = false;
 						Sleep(500);
 					}
 					isRuning = true;
 					CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PBThreadProc, hWnd, 0, 0);
-					CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)download, dlProcessBar, 0, 0);
+					CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)download, hWnd, 0, 0);
 				}
 				else
 				{
