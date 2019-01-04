@@ -30,6 +30,7 @@ extern long long ddlnow;						//下载进度
 extern bool isRuning;							//下载线程状态
 BOOL isFirtClick;								//是否是第一次点击下载按钮
 
+ITaskbarList3 *TaskbarList = nullptr;
 
 // 此代码模块中包含的函数的前向声明:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -129,6 +130,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
+   HRESULT hr = CoCreateInstance(CLSID_TaskbarList, nullptr, CLSCTX_ALL, __uuidof(ITaskbarList3), (LPVOID*)&TaskbarList);
+
+   if (!SUCCEEDED(hr))
+   {
+	   return FALSE;
+   }
+
    return TRUE;
 }
 
@@ -146,8 +154,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	static HFONT hFont ;				//编辑框字体
 	static HFONT hFontButton;			//按钮字体
-	HDC hdcStatic;
-	LPWSTR urlTheme;					//存放链接
+	static HDC hdcStatic;
+	static LPWSTR urlTheme;					//存放链接
 
 	static RECT rc;
 	static size_t x, y, h, w;
@@ -197,7 +205,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				delete[] urlTheme;
 				break;
 			case ID_BUTTON_DOWNLOAD:
-
+				//TaskbarList->SetProgressValue(hWnd, 50, 100);
 				urlTheme = new WCHAR[1000];
 				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
 				if (Generate(urlTheme))
@@ -216,7 +224,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						Sleep(500);
 					}
 					isRuning = true;
-					CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PBThreadProc, dlProcessBar, 0, 0);
+					CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)PBThreadProc, hWnd, 0, 0);
 					CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)download, dlProcessBar, 0, 0);
 				}
 				else
@@ -280,7 +288,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
 		DeleteObject(hFont);
 		DeleteObject(hFontButton);
-		
+		TaskbarList->Release();
         PostQuitMessage(0);
         break;
     default:
@@ -319,31 +327,32 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 DWORD WINAPI PBThreadProc(LPVOID lpParameter)
 {
-	HWND hwndPB = (HWND)lpParameter;    //进度条的窗口句柄
+	HWND taskBar = (HWND)lpParameter;     //taskbar进度的窗口句柄
+	
 	PBRANGE range;                        //进度条的范围
 
-	SendMessage(hwndPB, PBM_SETRANGE,    //设置进度条的范围
+	SendMessage(dlProcessBar, PBM_SETRANGE,    //设置进度条的范围
 		(WPARAM)0, (LPARAM)(MAKELPARAM(0, 100)));
 
-	SendMessage(hwndPB, PBM_GETRANGE,    //获取进度条的范围
+	SendMessage(dlProcessBar, PBM_GETRANGE,    //获取进度条的范围
 		(WPARAM)TRUE,                    //TRUE 表示返回值为范围的最小值,FALSE表示返回最大值
 		(LPARAM)&range);
-	static int i = 0;
 	while (isRuning)
 	{
-		SendMessage(hwndPB, PBM_SETPOS, (WPARAM)(ddlnow), (LPARAM)0);
-		if (SendMessage(hwndPB, PBM_GETPOS, (WPARAM)0, (LPARAM)0) //取得进度条当前位置
+		SendMessage(dlProcessBar, PBM_SETPOS, (WPARAM)(ddlnow), (LPARAM)0); //设置进度条
+		if (SendMessage(dlProcessBar, PBM_GETPOS, (WPARAM)0, (LPARAM)0) //取得进度条当前位置
 			== range.iHigh)
 		{
-			SendMessage(hwndPB, PBM_SETPOS, (WPARAM)range.iLow, (LPARAM)0); //将进度条复位
+			SendMessage(dlProcessBar, PBM_SETPOS, (WPARAM)range.iLow, (LPARAM)0); //将进度条复位
 			ddlnow = 0;
 		}
+		TaskbarList->SetProgressValue(taskBar, (ULONGLONG)ddlnow, (ULONGLONG)100);
 		//UpdateWindow(hwndPB);
 		Sleep(20);
 	}
 
-	SendMessage(hwndPB, PBM_SETPOS, //设置进度条的新位置为当前位置加上范围的1/20
+	SendMessage(dlProcessBar, PBM_SETPOS, //将进度条复位
 		(WPARAM)(0), (LPARAM)0);
-	i = 0;
+	TaskbarList->SetProgressValue(taskBar, (ULONGLONG)0, (ULONGLONG)100);
 	return 0;
 }

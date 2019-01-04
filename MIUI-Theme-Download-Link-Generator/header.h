@@ -12,6 +12,7 @@
 #include <shellapi.h>					//ShellExecute
 #include <mmsystem.h>
 #include <commctrl.h>					//processbar
+#include <shobjidl_core.h>              //tasrbar progress
 // C 运行时头文件
 #include <stdlib.h>
 #include <malloc.h>
