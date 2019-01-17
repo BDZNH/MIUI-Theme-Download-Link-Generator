@@ -152,8 +152,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	static HFONT hFont ;				//编辑框字体
-	static HFONT hFontButton;			//按钮字体
+	static HFONT hFont ;					//编辑框字体
+	static HFONT hFontButton;				//按钮字体
 	static HDC hdcStatic;
 	static LPWSTR urlTheme;					//存放链接
 
@@ -249,20 +249,36 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
 			//MoveToEx(hdc, 0, 0, NULL);
-			//LineTo(hdc, 575, 0);
             // TODO: 在此处添加使用 hdc 的任何绘图代码...
             EndPaint(hWnd, &ps);
         }
         break;
 	case WM_CREATE:
 		{
+			//修正窗口大小
+			{
+				//获取客户区大小
+				GetClientRect(hWnd, &rc);
+				x = rc.left;
+				y = rc.top;
+				w = rc.right - x;
+				h = rc.bottom - y;
+				if (h < 120 || w < 556)
+				{
+					h = 120 - h;
+					w = 556 - w;
+					GetWindowRect(hWnd, &rc);
+					MoveWindow(hWnd, rc.left, rc.top, rc.right - rc.left + w, rc.bottom - rc.top + h, true);
+				}
+			}
+			
 			hFont = CreateFont(-20/*高*/, -10/*宽*/, 0, 0, 0 /*700表示粗体*/,FALSE/*斜体?*/, FALSE/*下划线?*/, FALSE/*删除线?*/, DEFAULT_CHARSET,OUT_CHARACTER_PRECIS, CLIP_CHARACTER_PRECIS, DEFAULT_QUALITY,FF_DONTCARE, TEXT("微软雅黑"));
 
-			EDIT_STOREUTL		= CreateWindow(L"EDIT", L"粘贴主题链接", WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL , 7,  8, 542, 28, hWnd, (HMENU)ID_EDIT_STOREUTL, NULL, NULL);
+			EDIT_STOREUTL		= CreateWindow(L"EDIT", L"粘贴主题链接", WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL | EM_SETTABSTOPS, 7,  8, 542, 28, hWnd, (HMENU)ID_EDIT_STOREUTL, NULL, NULL);
 			SendMessage(EDIT_STOREUTL, WM_SETFONT, (WPARAM)hFont, 1);
 
 			CreateWindow(L"STATIC", NULL, WS_CHILD | WS_VISIBLE , 7, 43, 542, 28, hWnd, NULL, NULL, NULL);
-			EDIT_EDIT_DOWNLINK	= CreateWindow(L"EDIT", L"生成的下载链接", WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL | ES_READONLY, 7, 43, 542, 28, hWnd, NULL, NULL, NULL);
+			EDIT_EDIT_DOWNLINK	= CreateWindow(L"EDIT", L"生成的下载链接", WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL | EM_SETTABSTOPS/*ES_READONLY*/, 7, 43, 542, 28, hWnd, NULL, NULL, NULL);
 			SendMessage(EDIT_EDIT_DOWNLINK, WM_SETFONT, (WPARAM)hFont, 1);
 
 			hFontButton = CreateFont(-16/*高*/, -7/*宽*/, 0, 0, 0 /*700表示粗体*/, FALSE/*斜体?*/, FALSE/*下划线?*/, FALSE/*删除线?*/, DEFAULT_CHARSET, OUT_CHARACTER_PRECIS, CLIP_CHARACTER_PRECIS, DEFAULT_QUALITY, FF_DONTCARE, TEXT("微软雅黑"));
@@ -323,7 +339,6 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-
 DWORD WINAPI PBThreadProc(LPVOID lpParameter)
 {
 	HWND taskBar = (HWND)lpParameter;     //taskbar进度的窗口句柄
@@ -334,7 +349,7 @@ DWORD WINAPI PBThreadProc(LPVOID lpParameter)
 		(WPARAM)0, (LPARAM)(MAKELPARAM(0, 100)));
 
 	SendMessage(dlProcessBar, PBM_GETRANGE,    //获取进度条的范围
-		(WPARAM)TRUE,                    //TRUE 表示返回值为范围的最小值,FALSE表示返回最大值
+		(WPARAM)TRUE,						   //TRUE 表示返回值为范围的最小值,FALSE表示返回最大值
 		(LPARAM)&range);
 	while (isRuning)
 	{
@@ -345,8 +360,7 @@ DWORD WINAPI PBThreadProc(LPVOID lpParameter)
 			SendMessage(dlProcessBar, PBM_SETPOS, (WPARAM)range.iLow, (LPARAM)0); //将进度条复位
 			ddlnow = 0;
 		}
-		TaskbarList->SetProgressValue(taskBar, (ULONGLONG)ddlnow, (ULONGLONG)100);
-		//UpdateWindow(hwndPB);
+		TaskbarList->SetProgressValue(taskBar, (ULONGLONG)ddlnow, (ULONGLONG)100); //设置任务栏进度条
 		Sleep(20);
 	}
 
