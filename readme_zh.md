@@ -26,3 +26,10 @@
 # 依赖
  - [rapidjson](https://github.com/Tencent/rapidjson)
  - [libcurl](https://curl.haxx.se/download.html)
+
+-----
+并非所有的主题都有不同版本的主题包，有些主题miui9和miui10共用一个包，区分版本下载时，请自行确定是否存在不同版本的不同主题包。
+
+如下图：
+
+![](https://i.loli.net/2019/02/23/5c70f140d57c3.jpg)

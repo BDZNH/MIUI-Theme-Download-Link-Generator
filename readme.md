@@ -25,3 +25,9 @@ If you want to compile it by yourself. You need [libcurl](https://curl.haxx.se/d
 # Dependence
  - [rapidjson](https://github.com/Tencent/rapidjson)
  - [libcurl](https://curl.haxx.se/download.html)
+
+-----
+Attention: maybe there are different theme for different system.
+
+just like this
+![](https://i.loli.net/2019/02/23/5c70f140d57c3.jpg)
