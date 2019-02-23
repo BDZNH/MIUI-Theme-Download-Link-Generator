@@ -23,12 +23,22 @@ HWND BUTTON_ABOUTME;							//关于我按钮
 HWND dlProcessBar;								//下载进度条
 
 
+HWND MIUIVersion1;                              // MIUI V4
+HWND MIUIVersion2;                              // MIUI V5
+HWND MIUIVersion3;                              // MIUI V6/V7
+HWND MIUIVersion5;                              // MIUI V8/V9
+HWND MIUIVersion7;                              // MIUI V10
+
 static HWND EDIT_STOREUTL;						//主题链接编辑框
 static HWND EDIT_EDIT_DOWNLINK;					//下载链接编辑框
 
-extern long long ddlnow;						//下载进度
-extern bool isRuning;							//下载线程状态
-BOOL isFirtClick;								//是否是第一次点击下载按钮
+extern long long ddlnow;                        //下载进度
+extern bool isRuning;                           //下载线程状态
+BOOL isFirtClick;                               //是否是第一次点击下载按钮
+
+
+
+
 
 ITaskbarList3 *TaskbarList = nullptr;
 
@@ -38,6 +48,8 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 DWORD WINAPI PBThreadProc(LPVOID lpParameter);
+int GetMIUIVersion();
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -121,7 +133,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // 将实例句柄存储在全局变量中
 
    HWND hWnd = CreateWindowW(szWindowClass, L"MIUI主题下载直链", WS_SYSMENU | WS_MINIMIZEBOX,
-      320, 180, 574, 158, nullptr, nullptr, hInstance, nullptr);
+      320, 180, 574, 178, nullptr, nullptr, hInstance, nullptr);
    if (!hWnd)
    {
       return FALSE;
@@ -159,6 +171,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	static RECT rc;
 	static size_t x, y, h, w;
+
+	static int version;
     switch (message)
     {
     case WM_COMMAND:
@@ -179,7 +193,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			case ID_BUTTON_GENERATE:
 				urlTheme = new WCHAR[1000];
 				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
-				if (Generate(urlTheme))
+				version = GetMIUIVersion();
+				if (Generate(urlTheme, version))
 				{
 					PlaySound((LPCTSTR)IDR_WAVE_SUCCESS, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
 				}
@@ -193,7 +208,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			case ID_BUTTON_COPY:
 				urlTheme = new WCHAR[1000];
 				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
-				if (Generate(urlTheme) && CopyToClipboard(hWnd, urlTheme, 998))
+				version = GetMIUIVersion();
+				if (Generate(urlTheme, version) && CopyToClipboard(hWnd, urlTheme, 998))
 				{
 					PlaySound((LPCTSTR)IDR_WAVE_SUCCESS, hInst, SND_RESOURCE | SND_ASYNC | SND_NOSTOP);
 				}
@@ -206,15 +222,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				break;
 			case ID_BUTTON_DOWNLOAD:
 				urlTheme = new WCHAR[1000];
+				version = GetMIUIVersion();
 				GetWindowText(EDIT_STOREUTL, urlTheme, 1000);
-				if (Generate(urlTheme))
+				if (Generate(urlTheme, version))
 				{
 					SetWindowText(EDIT_EDIT_DOWNLINK, urlTheme);
 					if (isFirtClick)
 					{
 						GetWindowRect(hWnd, &rc);
 						MoveWindow(hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top + 27, true);
-						dlProcessBar = CreateWindowEx(0, PROGRESS_CLASS, NULL, WS_CHILD | WS_VISIBLE, 7, 119, 543, 20, hWnd, (HMENU)0, NULL, NULL);
+						dlProcessBar = CreateWindowEx(0, PROGRESS_CLASS, NULL, WS_CHILD | WS_VISIBLE, 7, 139, 543, 20, hWnd, (HMENU)0, NULL, NULL);
 						isFirtClick = false;
 					}
 					if (isRuning == true)
@@ -239,11 +256,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
-	case WM_CTLCOLORSTATIC:
-		hdcStatic = (HDC)wParam;
-		//将STATIC控件背景色设置为白色，设置edit控件为readonly时显示的就是static的颜色了，间接把edit变白
-		SetBkColor(hdcStatic, RGB(255, 255, 255)); 
-		break;
+	//case WM_CTLCOLORSTATIC:
+	//	hdcStatic = (HDC)wParam;
+	//	//将STATIC控件背景色设置为白色，设置edit控件为readonly时显示的就是static的颜色了，间接把edit变白
+	//	//SetBkColor(hdcStatic, RGB(255, 255, 255)); 
+	//	break;
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
@@ -257,8 +274,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			//修正窗口大小
 			{
-				//获取客户区大小
-				GetClientRect(hWnd, &rc);
+				GetClientRect(hWnd, &rc); //获取客户区大小
 				x = rc.left;
 				y = rc.top;
 				w = rc.right - x;
@@ -278,26 +294,45 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			SendMessage(EDIT_STOREUTL, WM_SETFONT, (WPARAM)hFont, 1);
 
 			CreateWindow(L"STATIC", NULL, WS_CHILD | WS_VISIBLE , 7, 43, 542, 28, hWnd, NULL, NULL, NULL);
-			EDIT_EDIT_DOWNLINK	= CreateWindow(L"EDIT", L"生成的下载链接", WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL | ES_READONLY, 7, 43, 542, 28, hWnd, NULL, NULL, NULL);
+			EDIT_EDIT_DOWNLINK	= CreateWindow(L"EDIT", L"生成的下载链接", WS_CHILD | WS_VISIBLE | ES_LEFT | ES_AUTOHSCROLL /*| ES_READONLY*/, 7, 43, 542, 28, hWnd, NULL, NULL, NULL);
 			SendMessage(EDIT_EDIT_DOWNLINK, WM_SETFONT, (WPARAM)hFont, 1);
 
 			hFontButton = CreateFont(-16/*高*/, -7/*宽*/, 0, 0, 0 /*700表示粗体*/, FALSE/*斜体?*/, FALSE/*下划线?*/, FALSE/*删除线?*/, DEFAULT_CHARSET, OUT_CHARACTER_PRECIS, CLIP_CHARACTER_PRECIS, DEFAULT_QUALITY, FF_DONTCARE, TEXT("微软雅黑"));
 
-			BUTTON_OPENSTORE	= CreateWindow(L"BUTTON", L"打开主题商店", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 6, 78, 130, 35, hWnd, (HMENU)ID_BUTTON_OPENSTORE, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			BUTTON_OPENSTORE	= CreateWindow(L"BUTTON", L"打开主题商店", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER | WS_GROUP, 6, 98, 130, 35, hWnd, (HMENU)ID_BUTTON_OPENSTORE, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(BUTTON_OPENSTORE, WM_SETFONT, (WPARAM)hFontButton, 1);
 
-			BUTTON_GENERATE		= CreateWindow(L"BUTTON", L"生成链接", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER , 140, 78, 110, 35, hWnd, (HMENU)ID_BUTTON_GENERATE, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			BUTTON_GENERATE		= CreateWindow(L"BUTTON", L"生成链接", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER , 140, 98, 110, 35, hWnd, (HMENU)ID_BUTTON_GENERATE, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(BUTTON_GENERATE, WM_SETFONT, (WPARAM)hFontButton, 1);
 
-			BUTTON_COPY = CreateWindow(L"BUTTON", L"复制", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 254, 78, 96, 35, hWnd, (HMENU)ID_BUTTON_COPY, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			BUTTON_COPY = CreateWindow(L"BUTTON", L"复制", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 254, 98, 96, 35, hWnd, (HMENU)ID_BUTTON_COPY, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(BUTTON_COPY, WM_SETFONT, (WPARAM)hFontButton, 1);
 
-			BUTTON_DOWNLOAD		= CreateWindow(L"BUTTON", L"下载", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 354, 78, 96, 35, hWnd, (HMENU)ID_BUTTON_DOWNLOAD, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			BUTTON_DOWNLOAD		= CreateWindow(L"BUTTON", L"下载", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 354, 98, 96, 35, hWnd, (HMENU)ID_BUTTON_DOWNLOAD, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(BUTTON_DOWNLOAD, WM_SETFONT, (WPARAM)hFontButton, 1);
 
-			BUTTON_ABOUTME		= CreateWindow(L"BUTTON", L"关于", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 454, 78, 97, 35, hWnd, (HMENU)ID_BUTTON_ABOUTME, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			BUTTON_ABOUTME		= CreateWindow(L"BUTTON", L"关于", WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_CENTER, 454, 98, 97, 35, hWnd, (HMENU)ID_BUTTON_ABOUTME, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(BUTTON_ABOUTME, WM_SETFONT, (WPARAM)hFontButton, 1);
 
+			
+			//radiobox            change MIUI version
+			hFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
+
+			MIUIVersion1 = CreateWindow(L"BUTTON", L"V4", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON | WS_GROUP, 7, 76, 50, 20, hWnd, (HMENU)ID_RADIOBOX_V4, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			SendMessage(MIUIVersion1, WM_SETFONT, (WPARAM)hFont, 1);
+
+			MIUIVersion2 = CreateWindow(L"BUTTON", L"V5", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON , 57, 76, 50, 20, hWnd, (HMENU)ID_RADIOBOX_V5, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			SendMessage(MIUIVersion2, WM_SETFONT, (WPARAM)hFont, 1);
+
+			MIUIVersion3 = CreateWindow(L"BUTTON", L"V6/V7", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON , 107, 76, 50, 20, hWnd, (HMENU)ID_RADIOBOX_V6_V7, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			SendMessage(MIUIVersion3, WM_SETFONT, (WPARAM)hFont, 1);
+
+			MIUIVersion5 = CreateWindow(L"BUTTON", L"V8/V9", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON , 177, 76, 50, 20, hWnd, (HMENU)ID_RADIOBOX_V8_V9, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			SendMessage(MIUIVersion5, WM_SETFONT, (WPARAM)hFont, 1);
+
+			MIUIVersion7 = CreateWindow(L"BUTTON", L"V10", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON , 247, 76, 50, 20, hWnd, (HMENU)ID_RADIOBOX_V10, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			SendMessage(MIUIVersion7, WM_SETFONT, (WPARAM)hFont, 1);
+			SendMessage(MIUIVersion7, BM_SETCHECK, BST_CHECKED, 0);
 		}
 		break;
     case WM_DESTROY:
@@ -328,8 +363,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             EndDialog(hDlg, LOWORD(wParam));
             return (INT_PTR)TRUE;
         }
-		else
-		if (LOWORD(wParam) == IDC_BUTTON_INDEX)
+		else if (LOWORD(wParam) == IDC_BUTTON_INDEX)
 		{
 			ShellExecute(NULL, _T("open"), _T("explorer.exe"), _T("https://github.com/BDZNH/MIUI-Theme-Download-Link-Generator/"), NULL, SW_SHOW);
 		}
@@ -368,4 +402,30 @@ DWORD WINAPI PBThreadProc(LPVOID lpParameter)
 		(WPARAM)(0), (LPARAM)0);
 	TaskbarList->SetProgressValue(taskBar, (ULONGLONG)0, (ULONGLONG)100);
 	return 0;
+}
+
+
+int GetMIUIVersion()
+{
+	if (SendMessage(MIUIVersion1, BM_GETCHECK, 0, 0) == BST_CHECKED)
+	{
+		return 1;
+	}
+	else if (SendMessage(MIUIVersion2, BM_GETCHECK, 0, 0) == BST_CHECKED)
+	{
+		return 2;
+	}
+	else if (SendMessage(MIUIVersion3, BM_GETCHECK, 0, 0) == BST_CHECKED)
+	{
+		return 3;
+	}
+	else if (SendMessage(MIUIVersion5, BM_GETCHECK, 0, 0) == BST_CHECKED)
+	{
+		return 5;
+	}
+	else /*if (SendMessage(MIUIVersion7, BM_GETCHECK, 0, 0) == BST_CHECKED)
+	{*/
+		return 7;
+	/*}
+	return 7;*/
 }

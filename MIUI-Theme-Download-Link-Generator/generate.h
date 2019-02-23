@@ -74,7 +74,7 @@ namespace
 	}
 }
 
-bool Generate(LPWSTR url);
+bool Generate(LPWSTR url,int version);
 BOOL CopyToClipboard(HWND hWnd, const WCHAR* pszData, const int nDataLen);
 DWORD WINAPI download(LPVOID lpParameter);
 

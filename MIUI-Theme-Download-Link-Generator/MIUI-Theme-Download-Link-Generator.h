@@ -10,3 +10,9 @@
 
 #define ID_EDIT_STOREUTL	1201
 #define ID_EDIT_DOWNLINK	1202
+
+#define ID_RADIOBOX_V4      1301
+#define ID_RADIOBOX_V5      1301
+#define ID_RADIOBOX_V6_V7   1301
+#define ID_RADIOBOX_V8_V9   1301
+#define ID_RADIOBOX_V10     1301

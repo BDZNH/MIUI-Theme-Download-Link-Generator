@@ -3,9 +3,17 @@
 long long ddlnow = 0;				//下载进度
 bool isRuning;						//下载线程状态
 char dLinktemp[300];				//用一个全局变量来保存生成的链接
+char Version[7][63] = {
+	{"?capability=w%2Cb%2Cs%2Cm%2Ch5%2Cv%3A8%2Cvw&miuiUIVersion=V4\0"},
+	{"?capability=w%2Cb%2Cs%2Cm%2Ch5%2Cv%3A8%2Cvw&miuiUIVersion=V5\0"},
+	{"?capability=w%2Cb%2Cs%2Cm%2Ch5%2Cv%3A8%2Cvw&miuiUIVersion=V6\0"},
+	{"\0"},
+	{"?capability=w%2Cb%2Cs%2Cm%2Ch5%2Cv%3A8%2Cvw&miuiUIVersion=V8\0"},
+	{""},
+	{"?capability=w%2Cb%2Cs%2Cm%2Ch5%2Cv%3A8%2Cvw&miuiUIVersion=V10\0"}
+};
 
-
-bool Generate(LPWSTR url)
+bool Generate(LPWSTR url,int version)
 {
 	bool flag = false;
 	//char ccurl[1000];
@@ -14,9 +22,9 @@ bool Generate(LPWSTR url)
 	const char urlTheme[] = "http://zhuti.xiaomi.com/detail/";
 	//char urlLink[1000] = "http://thm.market.xiaomi.com/thm/download/v2/";
 	char *urlLink = new char[1000];
-	strcpy(urlLink, "http://thm.market.xiaomi.com/thm/download/v2/");
+	strcpy(urlLink, "https://thm.market.xiaomi.com/thm/download/v2/");
 	//char directLink[1000];
-	size_t len = strlen(urlLink);
+	
 	if (strlen(ccurl) < strlen(urlTheme))
 	{
 		flag = false;
@@ -25,9 +33,12 @@ bool Generate(LPWSTR url)
 		MultiByteToWideChar(CP_ACP, 0, urlLink, -1, url, dwNum);
 		return flag;
 	}
+	size_t len = strlen(urlLink);
 	char *p = &urlLink[len];
 	strcpy(p, ccurl + (strlen(urlTheme)));
-
+	len = strlen(urlLink);
+	p = &urlLink[len];
+	strcpy(p, Version[version - 1]);
 
 	CURL* curl = curl_easy_init();
 
@@ -140,7 +151,7 @@ static int xferinfo(void *p,
 
 	if (dlnow - ddlnow > dltotal / 100.0)
 	{
-		ddlnow = (dlnow * 100 / dltotal);
+		ddlnow = (dlnow * 100 / dltotal);  //更新下载进度
 	}
 
 	if (isRuning==false)
