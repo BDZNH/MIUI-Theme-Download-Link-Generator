@@ -1,19 +1,15 @@
 [English](readme.md)
 
 # 生成小米主题下载链接
-![等待输入](https://i.loli.net/2018/12/04/5c05de3f915ea.jpg)
-　
-![生成成功](https://i.loli.net/2018/12/04/5c05de3fb0267.jpg)
-　
-![失败1](https://i.loli.net/2018/12/04/5c05de4086ab1.jpg)
-　
-![失败2](https://i.loli.net/2018/12/04/5c05de40793c0.jpg)
+![等待输入链接.jpg](https://i.loli.net/2019/02/23/5c70f47d135f7.jpg)
+![链接解析成功.jpg](https://i.loli.net/2019/02/23/5c70f47e017e3.jpg)
+![链接解析失败.jpg](https://i.loli.net/2019/02/23/5c70f47e4a856.jpg)
+![轻雨主题V9版本.jpg](https://i.loli.net/2019/02/23/5c70f47e7c611.jpg)
+![轻雨主题V10版本.jpg](https://i.loli.net/2019/02/23/5c70f47e7d213.jpg)
 
 ## 下载中
 
-![fineshed10.jpg](https://i.loli.net/2019/01/03/5c2df8f4e8b83.jpg)
-
-![finished7.png](https://i.loli.net/2019/01/03/5c2df8f5355e2.png)
+![下载中.jpg](https://i.loli.net/2019/02/23/5c70f47e89852.jpg)
 
 ## Animation
 

@@ -1,19 +1,15 @@
 [中文](readme_zh.md)
 
 # Generate the download link of MIUI theme.
-![waiting](https://i.loli.net/2018/12/04/5c05de3f915ea.jpg)
-　
-![successful](https://i.loli.net/2018/12/04/5c05de3fb0267.jpg)
-　
-![error 1](https://i.loli.net/2018/12/04/5c05de4086ab1.jpg)
-　
-![error 2](https://i.loli.net/2018/12/04/5c05de40793c0.jpg)
+![waiting.jpg](https://i.loli.net/2019/02/23/5c70f47d135f7.jpg)
+![success.jpg](https://i.loli.net/2019/02/23/5c70f47e017e3.jpg)
+![failed.jpg](https://i.loli.net/2019/02/23/5c70f47e4a856.jpg)
+![me.morirain MIUI V9.jpg](https://i.loli.net/2019/02/23/5c70f47e7c611.jpg)
+![me.morirain MIUI V10.jpg](https://i.loli.net/2019/02/23/5c70f47e7d213.jpg)
 　
 ## Downloading
 
-![fineshed10.jpg](https://i.loli.net/2019/01/03/5c2df8f4e8b83.jpg)
-
-![finished7.png](https://i.loli.net/2019/01/03/5c2df8f5355e2.png)
+![downloading](https://i.loli.net/2019/02/23/5c70f47e89852.jpg)
 
 ## Animation
 
