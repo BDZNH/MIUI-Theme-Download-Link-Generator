@@ -13,7 +13,7 @@
 
 ## Animation
 
-![bandicam-2019-01-04-22-05-27-489_1.gif](https://i.loli.net/2019/01/04/5c2f6d0279a8f.gif)
+![usage](https://i.loli.net/2019/02/25/5c73d17995cd6.gif)
 
 -----
 如果你想自己编译的话，你需要 [libcurl](https://curl.haxx.se/download.html) 。
@@ -24,6 +24,7 @@
  - [libcurl](https://curl.haxx.se/download.html)
 
 -----
+注意：
 并非所有的主题都有不同版本的主题包，有些主题miui9和miui10共用一个包，区分版本下载时，请自行确定是否存在不同版本的不同主题包。
 
 如下图：

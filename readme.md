@@ -13,7 +13,7 @@
 
 ## Animation
 
-![bandicam-2019-01-04-22-05-27-489_1.gif](https://i.loli.net/2019/01/04/5c2f6d0279a8f.gif)
+![usage](https://i.loli.net/2019/02/25/5c73d17995cd6.gif)
 -----
 If you want to compile it by yourself. You need [libcurl](https://curl.haxx.se/download.html) installed.
 
@@ -23,7 +23,8 @@ If you want to compile it by yourself. You need [libcurl](https://curl.haxx.se/d
  - [libcurl](https://curl.haxx.se/download.html)
 
 -----
-Attention: maybe there are different theme for different system.
+##Attention: 
+maybe there are different theme for different version for some systems.
 
 just like this
 ![](https://i.loli.net/2019/02/23/5c70f140d57c3.jpg)

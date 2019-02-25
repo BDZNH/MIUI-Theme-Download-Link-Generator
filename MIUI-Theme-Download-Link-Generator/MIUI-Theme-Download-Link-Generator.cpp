@@ -130,7 +130,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // 将实例句柄存储在全局变量中
 
    HWND hWnd = CreateWindowW(szWindowClass, L"MIUI主题下载直链", WS_SYSMENU | WS_MINIMIZEBOX,
-      320, 180, 574, 178, nullptr, nullptr, hInstance, nullptr);
+	   CW_USEDEFAULT, CW_USEDEFAULT, 574, 178, nullptr, nullptr, hInstance, nullptr);
    if (!hWnd)
    {
       return FALSE;
