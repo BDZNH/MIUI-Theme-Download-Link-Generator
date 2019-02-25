@@ -39,6 +39,9 @@
     <ClInclude Include="generate.h">
       <Filter>generator and downloader</Filter>
     </ClInclude>
+    <ClInclude Include="Theme.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MIUI-Theme-Download-Link-Generator.cpp">
@@ -49,6 +52,9 @@
     </ClCompile>
     <ClCompile Include="generate.cpp">
       <Filter>generator and downloader</Filter>
+    </ClCompile>
+    <ClCompile Include="Theme.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

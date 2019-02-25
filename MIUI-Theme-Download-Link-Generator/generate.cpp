@@ -9,7 +9,7 @@ char Version[7][63] = {
 	{"?capability=w%2Cb%2Cs%2Cm%2Ch5%2Cv%3A8%2Cvw&miuiUIVersion=V6\0"},
 	{"\0"},
 	{"?capability=w%2Cb%2Cs%2Cm%2Ch5%2Cv%3A8%2Cvw&miuiUIVersion=V8\0"},
-	{""},
+	{"\0"},
 	{"?capability=w%2Cb%2Cs%2Cm%2Ch5%2Cv%3A8%2Cvw&miuiUIVersion=V10\0"}
 };
 

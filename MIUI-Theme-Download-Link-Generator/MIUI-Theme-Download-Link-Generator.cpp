@@ -22,7 +22,7 @@ HWND BUTTON_DOWNLOAD;							//下载按钮
 HWND BUTTON_ABOUTME;							//关于我按钮
 HWND dlProcessBar;								//下载进度条
 
-
+HWND RadioGroupBox;                             
 HWND MIUIVersion1;                              // MIUI V4
 HWND MIUIVersion2;                              // MIUI V5
 HWND MIUIVersion3;                              // MIUI V6/V7
@@ -35,9 +35,6 @@ static HWND EDIT_EDIT_DOWNLINK;					//下载链接编辑框
 extern long long ddlnow;                        //下载进度
 extern bool isRuning;                           //下载线程状态
 BOOL isFirtClick;                               //是否是第一次点击下载按钮
-
-
-
 
 
 ITaskbarList3 *TaskbarList = nullptr;
@@ -317,6 +314,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			
 			//radiobox            change MIUI version
 			hFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
+
+			/*RadioGroupBox= CreateWindow(TEXT("Button"), TEXT("Check Boxes"), WS_CHILD | WS_VISIBLE | BS_GROUPBOX, 6, 75, 299, 22, hWnd, NULL, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			SendMessage(RadioGroupBox, WM_SETFONT, (WPARAM)GetStockObject(17), 0);*/
 
 			MIUIVersion1 = CreateWindow(L"BUTTON", L"V4", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON | WS_GROUP, 7, 76, 50, 20, hWnd, (HMENU)ID_RADIOBOX_V4, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(MIUIVersion1, WM_SETFONT, (WPARAM)hFont, 1);
