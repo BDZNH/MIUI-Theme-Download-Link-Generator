@@ -12,7 +12,8 @@
 #define ID_EDIT_DOWNLINK	1202
 
 #define ID_RADIOBOX_V4      1301
-#define ID_RADIOBOX_V5      1301
-#define ID_RADIOBOX_V6_V7   1301
-#define ID_RADIOBOX_V8_V9   1301
-#define ID_RADIOBOX_V10     1301
+#define ID_RADIOBOX_V5      1302
+#define ID_RADIOBOX_V6_V7   1303
+#define ID_RADIOBOX_V8_V9   1304
+#define ID_RADIOBOX_V10     1305
+#define ID_RADIOBOX_V11     1306

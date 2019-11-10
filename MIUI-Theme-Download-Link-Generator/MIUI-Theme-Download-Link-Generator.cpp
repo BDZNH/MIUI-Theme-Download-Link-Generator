@@ -28,6 +28,7 @@ HWND MIUIVersion2;                              // MIUI V5
 HWND MIUIVersion3;                              // MIUI V6/V7
 HWND MIUIVersion5;                              // MIUI V8/V9
 HWND MIUIVersion7;                              // MIUI V10
+HWND MIUIVersion11;                             // MIUI V11
 
 static HWND EDIT_STOREUTL;						//主题链接编辑框
 static HWND EDIT_EDIT_DOWNLINK;					//下载链接编辑框
@@ -333,7 +334,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 			MIUIVersion7 = CreateWindow(L"BUTTON", L"V10", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON , 247, 76, 50, 20, hWnd, (HMENU)ID_RADIOBOX_V10, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
 			SendMessage(MIUIVersion7, WM_SETFONT, (WPARAM)hFont, 1);
-			SendMessage(MIUIVersion7, BM_SETCHECK, BST_CHECKED, 0);
+			
+			MIUIVersion11= CreateWindow(L"BUTTON", L"V11", WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON , 297, 76, 50, 20, hWnd, (HMENU)ID_RADIOBOX_V11, ((LPCREATESTRUCT)lParam)->hInstance, NULL);
+			SendMessage(MIUIVersion11, WM_SETFONT, (WPARAM)hFont, 1);
+
+			SendMessage(MIUIVersion11, BM_SETCHECK, BST_CHECKED, 0);
 		}
 		break;
     case WM_DESTROY:
@@ -424,9 +429,9 @@ int GetMIUIVersion()
 	{
 		return 5;
 	}
-	else /*if (SendMessage(MIUIVersion7, BM_GETCHECK, 0, 0) == BST_CHECKED)
-	{*/
+	else if (SendMessage(MIUIVersion7, BM_GETCHECK, 0, 0) == BST_CHECKED)
+	{
 		return 7;
-	/*}
-	return 7;*/
+	} else 
+	return 8;
 }
