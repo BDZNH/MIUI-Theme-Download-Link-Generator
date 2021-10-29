@@ -1,6 +1,6 @@
 [English](readme.md)
 # UWP 版
-UWP 现已支持： ![https://www.microsoft.com/store/productId/9N12V6XN5PRG](https://www.microsoft.com/store/productId/9N12V6XN5PRG)
+UWP 现已支持： [https://www.microsoft.com/store/productId/9N12V6XN5PRG](https://www.microsoft.com/store/productId/9N12V6XN5PRG)
 
 
 # 生成小米主题下载链接
