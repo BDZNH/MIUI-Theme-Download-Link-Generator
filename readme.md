@@ -5,15 +5,7 @@
 see it at [https://www.microsoft.com/store/productId/9N12V6XN5PRG](https://www.microsoft.com/store/productId/9N12V6XN5PRG)
 
 # Generate the download link of MIUI theme.
-![waiting.jpg](https://i.loli.net/2019/02/23/5c70f47d135f7.jpg)
-![success.jpg](https://i.loli.net/2019/02/23/5c70f47e017e3.jpg)
-![failed.jpg](https://i.loli.net/2019/02/23/5c70f47e4a856.jpg)
-![me.morirain MIUI V9.jpg](https://i.loli.net/2019/02/23/5c70f47e7c611.jpg)
-![me.morirain MIUI V10.jpg](https://i.loli.net/2019/02/23/5c70f47e7d213.jpg)
-　
-## Downloading
-
-![downloading](https://i.loli.net/2019/02/23/5c70f47e89852.jpg)
+![mainwindow](![image](https://user-images.githubusercontent.com/17548735/160420466-e906aae3-f573-4637-a30f-8cb7293c2469.png))
 
 ## Animation
 
@@ -23,12 +15,14 @@ If you want to compile it by yourself. You need [libcurl](https://curl.haxx.se/d
 
 -----
 # Dependence
- - [rapidjson](https://github.com/Tencent/rapidjson)
+ - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
  - [libcurl](https://curl.haxx.se/download.html)
+ - [wxWidgets](https://github.com/wxWidgets/wxWidgets)
+ it highly recommended to use vcpkg to install dependences above.
 
 -----
 ##Attention: 
-maybe there are different theme for different version for some systems.
+maybe there are different .mtz package for different version for one miui theme.
 
 just like this
 ![](https://i.loli.net/2019/02/23/5c70f140d57c3.jpg)
