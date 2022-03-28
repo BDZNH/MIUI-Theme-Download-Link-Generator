@@ -5,7 +5,7 @@
 see it at [https://www.microsoft.com/store/productId/9N12V6XN5PRG](https://www.microsoft.com/store/productId/9N12V6XN5PRG)
 
 # Generate the download link of MIUI theme.
-![mainwindow](![image](./picture/mainwindow.png))
+![image](picture/mainwindow.png)
 
 ## Animation
 
