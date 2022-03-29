@@ -12,7 +12,6 @@
 #include <wx/aboutdlg.h>
 
 #include "Downloader.h"
-#include "applicationicon.xpm"
 
 class MyApp : public wxApp
 {

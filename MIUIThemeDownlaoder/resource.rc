@@ -1,4 +1,4 @@
-aaaa ICON "applicationicon.ico"
+aaaa ICON "appicon.ico"
 
 // this icon is used with wxFrame::SetIcon()
 appicon ICON "applicationicon.ico"
