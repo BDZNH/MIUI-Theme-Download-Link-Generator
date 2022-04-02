@@ -25,6 +25,7 @@ public:
 private:
     void OnExit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnResize(wxSizeEvent& event);
     virtual void onMessage(const std::string& str, MESSAGE_TYPE type) override;
     virtual void onProgress(size_t total, size_t current) override;
     virtual void onStart() override;
@@ -64,12 +65,10 @@ bool MyApp::OnInit()
 {
     MyFrame* frame = new MyFrame("MIUI主题下载器");
     frame->Show(true);
-    frame->SetMinClientSize(frame->FromDIP(wxSize(480, 220)));
-    frame->SetMaxClientSize(frame->FromDIP(wxSize(480, 220)));
     return true;
 }
 MyFrame::MyFrame(const wxString& title)
-    : wxFrame(NULL, wxID_ANY, title,wxDefaultPosition,{500,240})
+    : wxFrame(NULL, wxID_ANY, title,wxDefaultPosition)
 {
     SetIcon(wxICON(appicon));
     wxMenu* menuFile = new wxMenu;
@@ -83,23 +82,28 @@ MyFrame::MyFrame(const wxString& title)
     CreateStatusBar();
     SetStatusText("欢迎使用MIUI主题下载器");
     
-    mPanel = new wxPanel(this,wxID_ANY,wxDefaultPosition,{500,240});
+    mPanel = new wxPanel(this,wxID_ANY,wxDefaultPosition,FromDIP(wxSize(480,-1)));
     mDownloader = new Downloader(this);
     mMainlayoutContainer = new wxBoxSizer(wxVERTICAL);
-    mThemeUrlHint = new wxStaticText(mPanel, wxID_ANY, "MIUI主题链接", wxDefaultPosition, wxDefaultSize);
-    mThemeUrl = new wxTextCtrl(mPanel, wxID_ANY, "", wxDefaultPosition, {460,-1}, wxTE_PROCESS_ENTER);
+    mThemeUrlHint = new wxStaticText(mPanel, wxID_ANY, "MIUI主题链接");
+    wxSize defaultWindowSize = wxDefaultSize;
+    wxSize size = FromDIP(wxSize(460, defaultWindowSize.GetHeight()));
+    mThemeUrl = new wxTextCtrl(mPanel, wxID_ANY, "", wxDefaultPosition, size, wxTE_PROCESS_ENTER);
     mThemeUrl->Bind(wxEVT_TEXT_ENTER, [&](wxCommandEvent& event) {
         downloadLinkValid = false;
         mDownloader->tryget(mThemeUrl->GetLineText(0).ToStdString(), GET_DOWNLOAD_LINK_URL,mVersion);
         });
-    mThemeDownloadUrlHint = new wxStaticText(mPanel, wxID_ANY, "主题下载链接", wxDefaultPosition, wxDefaultSize);
-    mThemeDownloadUrl = new wxTextCtrl(mPanel, wxID_ANY, "", wxDefaultPosition, {460,-1}, wxTE_READONLY);
+    mThemeDownloadUrlHint = new wxStaticText(mPanel, wxID_ANY, "主题下载链接");
+    mThemeDownloadUrl = new wxTextCtrl(mPanel, wxID_ANY, "", wxDefaultPosition, size, wxTE_READONLY);
 
-    mMainlayoutContainer->Add(mThemeUrlHint, wxSTRETCH_NOT, wxALIGN_LEFT | wxLEFT|wxTOP | wxRIGHT, 10);
-    mMainlayoutContainer->Add(mThemeUrl, wxSTRETCH_NOT, wxALIGN_LEFT | wxLEFT | wxRIGHT, 10);
-    mMainlayoutContainer->AddSpacer(7);
-    mMainlayoutContainer->Add(mThemeDownloadUrlHint, wxSTRETCH_NOT, wxALIGN_LEFT | wxLEFT | wxRIGHT, 10);
-    mMainlayoutContainer->Add(mThemeDownloadUrl, wxSTRETCH_NOT, wxALIGN_LEFT | wxLEFT | wxRIGHT, 10);
+    int borderSize = GetDPIScaleFactor() * 10;
+    int verticalSpace = GetDPIScaleFactor() * 7;
+
+    mMainlayoutContainer->Add(mThemeUrlHint, wxSTRETCH_NOT, wxALIGN_LEFT | wxLEFT | wxTOP | wxRIGHT, borderSize);
+    mMainlayoutContainer->Add(mThemeUrl, wxEXPAND, wxALIGN_LEFT | wxLEFT | wxRIGHT , borderSize);
+    mMainlayoutContainer->AddSpacer(verticalSpace);
+    mMainlayoutContainer->Add(mThemeDownloadUrlHint, wxSTRETCH_NOT, wxALIGN_LEFT | wxLEFT | wxRIGHT, borderSize);
+    mMainlayoutContainer->Add(mThemeDownloadUrl, wxSTRETCH_NOT, wxALIGN_LEFT | wxLEFT | wxRIGHT, borderSize);
     wxArrayString choice;
     choice.Add("V4");
     choice.Add("V5");
@@ -108,7 +112,7 @@ MyFrame::MyFrame(const wxString& title)
     choice.Add("V10");
     choice.Add("V11");
     choice.Add("V12");
-    mVersionSelector = new wxRadioBox(mPanel, ID_RADIOBUTTON_GROUP, "", wxDefaultPosition, wxDefaultSize, choice);
+    mVersionSelector = new wxRadioBox(mPanel, ID_RADIOBUTTON_GROUP, "", wxDefaultPosition, size, choice);
     mVersionSelector->SetSelection(choice.size()-1);
     mVersionSelector->Bind(wxEVT_RADIOBOX, [&](wxCommandEvent& event) {
         std::string version = mVersionSelector->GetString(mVersionSelector->GetSelection()).ToStdString();
@@ -125,13 +129,15 @@ MyFrame::MyFrame(const wxString& title)
             mVersion = version;
         }
         });
-    mMainlayoutContainer->Add(mVersionSelector, wxSTRETCH_NOT, wxALIGN_LEFT | wxLEFT | wxRIGHT, 10);
+    mMainlayoutContainer->Add(mVersionSelector, wxSTRETCH_NOT, wxALIGN_LEFT | wxLEFT | wxRIGHT, borderSize);
 
     wxBoxSizer* buttonsContainer = new wxBoxSizer(wxHORIZONTAL);
-    openStore = new wxButton(mPanel, wxID_ANY, "打开主题商店");
-    getDownloadLink = new wxButton(mPanel, wxID_ANY, "获取下载链接");
-    copyDownloadLink = new wxButton(mPanel, wxID_ANY, "复制下载链接");
-    downloadThemeAsFile = new wxButton(mPanel, wxID_ANY, "下载");
+    int horizonSpace = GetDPIScaleFactor() * 2;
+    wxSize buttonSize = FromDIP(wxSize((480 - 20 - 2 * 3) / 4,defaultWindowSize.GetHeight()));
+    openStore = new wxButton(mPanel, wxID_ANY, "打开主题商店",wxDefaultPosition, buttonSize);
+    getDownloadLink = new wxButton(mPanel, wxID_ANY, "获取下载链接", wxDefaultPosition, buttonSize);
+    copyDownloadLink = new wxButton(mPanel, wxID_ANY, "复制下载链接", wxDefaultPosition, buttonSize);
+    downloadThemeAsFile = new wxButton(mPanel, wxID_ANY, "下载", wxDefaultPosition, buttonSize);
     openStore->Bind(wxEVT_BUTTON, [&](wxCommandEvent& event) {
         ShellExecute(NULL, L"open", L"http://zhuti.xiaomi.com/", NULL, NULL, SW_SHOWNORMAL);
         });
@@ -170,23 +176,27 @@ MyFrame::MyFrame(const wxString& title)
         mDownloader->tryget(mThemeDownloadUrl->GetLineText(0).ToStdString(), DOWNLOAD_THEME_AS_FILE, mVersion);
         });
 
-    buttonsContainer->Add(openStore, 2);
-    buttonsContainer->Add(getDownloadLink, 2, wxLEFT, 2);
-    buttonsContainer->Add(copyDownloadLink, 2, wxLEFT, 2);
-    buttonsContainer->Add(downloadThemeAsFile, 1,wxLEFT,2);
-    mMainlayoutContainer->AddSpacer(7);
-    mMainlayoutContainer->Add(buttonsContainer, wxSTRETCH_NOT,  wxLEFT | wxRIGHT, 10);
+    buttonsContainer->Add(openStore, wxSTRETCH_NOT);
+    buttonsContainer->Add(getDownloadLink, wxSTRETCH_NOT, wxLEFT, horizonSpace);
+    buttonsContainer->Add(copyDownloadLink, wxSTRETCH_NOT, wxLEFT, horizonSpace);
+    buttonsContainer->Add(downloadThemeAsFile, wxSTRETCH_NOT,wxLEFT, horizonSpace);
+    mMainlayoutContainer->AddSpacer(verticalSpace);
+    mMainlayoutContainer->Add(buttonsContainer, wxSTRETCH_NOT,  wxLEFT | wxRIGHT, borderSize);
 
-    mGauge = new wxGauge(mPanel, wxID_ANY, 100, wxDefaultPosition, { 460,-1 }, wxGA_HORIZONTAL);
-    mMainlayoutContainer->AddSpacer(7);
-    mMainlayoutContainer->Add(mGauge, wxSTRETCH_NOT, wxLEFT | wxBOTTOM | wxRIGHT, 11);
+    mGauge = new wxGauge(mPanel, wxID_ANY, 100, wxDefaultPosition, size, wxGA_HORIZONTAL);
+    mMainlayoutContainer->AddSpacer(verticalSpace);
+    mMainlayoutContainer->Add(mGauge, wxSTRETCH_NOT, wxLEFT | wxBOTTOM | wxRIGHT, borderSize);
+    mMainlayoutContainer->SetMinSize(FromDIP(wxSize(480, -1)));
 
     mPanel->SetSizerAndFit(mMainlayoutContainer);
+
+    // forbid resize window size
+    SetWindowStyle(GetWindowStyle() ^ wxMAXIMIZE_BOX);
+    Fit();
+    wxSize windowsize = mPanel->GetClientSize();
+    SetMinClientSize(windowsize);
+    SetMaxClientSize(windowsize);
     Center();
-    DoLayout();
-    //disableMaxMum
-    //SetWindowStyle(GetWindowStyle() ^ wxMAXIMIZE_BOX);
-    //Fit();
 }
 void MyFrame::OnExit(wxCommandEvent& event)
 {
@@ -202,6 +212,7 @@ void MyFrame::OnAbout(wxCommandEvent& event)
     aboutInfo.AddDeveloper("BDZNH");
     wxAboutBox(aboutInfo);
 }
+
 void MyFrame::onMessage(const std::string& str, MESSAGE_TYPE type)
 {
     switch (type)
